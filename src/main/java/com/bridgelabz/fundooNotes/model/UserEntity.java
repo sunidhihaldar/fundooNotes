@@ -26,10 +26,7 @@ public class UserEntity {
 	
 	@Column(nullable = false, length = 50)
 	private long mobileNumber;
-	
-	@Column(nullable = false, length = 50, unique = true)
-	private String username;
-	
+
 	@Column(nullable = false)
 	private String encryptedPassword;
 
@@ -80,20 +77,12 @@ public class UserEntity {
 	public void setMobileNumber(long mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
+	
+	public String getEncryptedPassword() {
 		return encryptedPassword;
 	}
 
-	public void setPassword(String password) {
+	public void setEncryptedPassword(String password) {
 		this.encryptedPassword = password;
 	}
 }
