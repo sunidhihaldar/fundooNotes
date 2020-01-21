@@ -1,4 +1,4 @@
-package com.bridgelabz.fundooNotes;
+package com.bridgelabz.fundooNotes.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

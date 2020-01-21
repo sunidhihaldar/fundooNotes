@@ -1,4 +1,4 @@
-package com.bridgelabz.fundooNotes;
+package com.bridgelabz.fundooNotes.dto;
 
 //Data transfer object class
 public class UserDto {
