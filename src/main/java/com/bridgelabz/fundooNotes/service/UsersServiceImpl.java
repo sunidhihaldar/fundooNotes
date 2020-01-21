@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.repository.IUserRepository;
@@ -22,7 +23,7 @@ public class UsersServiceImpl implements IUsersService {
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.userRepository = userRepository;
 	}
-
+	
 	// default method of UserDetailsService, locates user based on email
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
