@@ -3,17 +3,17 @@ package com.bridgelabz.fundooNotes.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table
 public class UserEntity {
 
 	@Id
-	@GeneratedValue
-	private long id;
-	
-	@Column(nullable = false, unique = true)
-	private String userId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long userId;
 	
 	@Column(nullable = false, length = 50)
 	private String firstName;
@@ -28,21 +28,31 @@ public class UserEntity {
 	private long mobileNumber;
 
 	@Column(nullable = false)
-	private String encryptedPassword;
+	private String password;
+	
+	@Column(columnDefinition = "boolean default false", nullable = false)
+	private boolean isVerified;
+	
+	private String createdAt;
 
-	public long getId() {
-		return id;
+	public UserEntity(long userId, String firstName, String lastName, String email, long mobileNumber,
+			String password) {
+		super();
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.mobileNumber = mobileNumber;
+		this.password = password;
 	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getUserId() {
+	
+	public UserEntity() { }
+		
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
@@ -78,11 +88,19 @@ public class UserEntity {
 		this.mobileNumber = mobileNumber;
 	}
 	
-	public String getEncryptedPassword() {
-		return encryptedPassword;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setEncryptedPassword(String password) {
-		this.encryptedPassword = password;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+	
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
 	}
 }

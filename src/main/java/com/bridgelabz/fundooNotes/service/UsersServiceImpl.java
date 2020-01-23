@@ -1,50 +1,64 @@
 package com.bridgelabz.fundooNotes.service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.bridgelabz.fundooNotes.customException.EmailAlreadyExistsException;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.repository.IUserRepository;
+import com.bridgelabz.fundooNotes.response.MailResponse;
+import com.bridgelabz.fundooNotes.util.JwtGenerator;
+import com.bridgelabz.fundooNotes.util.MailServiceProvider;
+import com.bridgelabz.fundooNotes.util.Utility;
 
+//used to load user details from a database
 @Service
-public class UsersServiceImpl implements IUsersService {
-
-	BCryptPasswordEncoder bCryptPasswordEncoder;
-	IUserRepository userRepository;
+public class UsersServiceImpl implements IUserService {
 
 	@Autowired
-	public UsersServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserRepository userRepository) {
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-		this.userRepository = userRepository;
-	}
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	// default method of UserDetailsService, locates user based on email
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserEntity userEntity = userRepository.findByEmail(email);
-		if (userEntity == null) {
-			throw new UsernameNotFoundException(email);
-		}
-		System.out.println(userEntity);
-		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), true, true, true, true,
-				new ArrayList<>());
-	}
+	@Autowired
+	private IUserRepository userRepository;
 	
+	@Autowired
+	private JwtGenerator generate;
+	
+	@Autowired
+	private MailServiceProvider mailServiceProvider;
+
 	@Override
-	public UserDto getUserByEmail(String email) {
-		UserEntity userEntity = userRepository.findByEmail(email);
-		if (userEntity == null) {
-			throw new UsernameNotFoundException(email);
-		}
-		System.out.println(userEntity);
-		// return new ModelMapper().map(userEntity, UserDto.class);
-		return null;
+	public boolean registration(UserDto userDto) {
+		UserEntity fetchedUser = userRepository.getUser(userDto.getEmail());
+		if(fetchedUser !=  null)
+			return false;
+		UserEntity user = new UserEntity();
+		BeanUtils.copyProperties(userDto,  user);
+		user.setCreatedAt(Utility.dateTime());
+		String password = bCryptPasswordEncoder.encode(user.getPassword());
+		user.setPassword(password);
+		userRepository.save(user);
+		String response = MailResponse.formMessage("http://192.168.1.41:8080/user/verification", generate.jwtToken(user.getUserId()));
+		mailServiceProvider.sendEmail(user.getEmail(), "Rgistration  verification link", response);
+		return true;
+	}
+
+	@Override
+	public boolean isVerified(String token) {
+		long fetchedUserId = generate.parseJWT(token);
+		userRepository.isVerified(fetchedUserId);
+		return true;
 	}
 
 }

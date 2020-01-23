@@ -1,22 +1,35 @@
 package com.bridgelabz.fundooNotes.dto;
 
-//Data transfer object class
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.stereotype.Component;
+
+@Component
+//Data transfer object class, contains details to be asked to the user
 public class UserDto {
 
-	private String userId;
+	@NotBlank
+	@Pattern(regexp = "[a-zA-Z]*", message = "Enter valid first name")
 	private String firstName;
-	private  String lastName;
-	private String email;
-	private long mobileNumber;
-	private String password;
-	private String encryptedPassword;
 	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+	@NotBlank
+	@Pattern(regexp = "[a-zA-Z]*", message = "Enter valid second name")
+	private  String lastName;
+	
+	@NotBlank
+	@Email
+	private String email;
+	
+	@NotNull(message = "Enter valid mobile number")
+	private long mobileNumber;
+	
+	@NotBlank
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message = "Enter a valid password")
+	private String password;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -46,11 +59,5 @@ public class UserDto {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getEncryptedPassword() {
-		return encryptedPassword;
-	}
-	public void setEncryptedPassword(String encryptedPassword) {
-		this.encryptedPassword = encryptedPassword;
 	}
 }
