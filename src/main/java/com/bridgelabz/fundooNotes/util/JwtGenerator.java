@@ -2,16 +2,19 @@ package com.bridgelabz.fundooNotes.util;
 
 import java.io.UnsupportedEncodingException;
 
+import org.springframework.stereotype.Component;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
+@Component
 public class JwtGenerator {
 
 	private static final String SECRET = "123456789";
 
-	//generate JWT token
+	// generate JWT token
 	public String jwtToken(long l) {
 		String token = null;
 		try {
@@ -24,7 +27,7 @@ public class JwtGenerator {
 		return token;
 	}
 
-	//method to parse jwt token into integer
+	// method to parse jwt token into integer
 	public int parseJWT(String jwt) {
 		Integer userId = 0;
 		if (jwt != null) {
@@ -38,7 +41,7 @@ public class JwtGenerator {
 		}
 		return userId;
 	}
-	
+
 //	public static void main(String[] args) {
 //		JwtGenerator jw = new JwtGenerator();
 //		String id = jw.JwtToken(10);

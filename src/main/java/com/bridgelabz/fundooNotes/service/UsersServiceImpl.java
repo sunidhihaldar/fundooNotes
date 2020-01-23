@@ -1,19 +1,12 @@
 package com.bridgelabz.fundooNotes.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.bridgelabz.fundooNotes.customException.EmailAlreadyExistsException;
+//import com.bridgelabz.fundooNotes.customException.EmailAlreadyExistsException;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.repository.IUserRepository;
@@ -49,8 +42,8 @@ public class UsersServiceImpl implements IUserService {
 		String password = bCryptPasswordEncoder.encode(user.getPassword());
 		user.setPassword(password);
 		userRepository.save(user);
-		String response = MailResponse.formMessage("http://192.168.1.41:8080/user/verification", generate.jwtToken(user.getUserId()));
-		mailServiceProvider.sendEmail(user.getEmail(), "Rgistration  verification link", response);
+		String response = MailResponse.formMessage("http://localhost:8081/user/verification", generate.jwtToken(user.getUserId()));
+		mailServiceProvider.sendEmail(user.getEmail(), "Rgistration  verification", response);
 		return true;
 	}
 

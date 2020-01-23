@@ -44,10 +44,11 @@ public class UserRepositoryImpl implements IUserRepository {
 	@Transactional
 	public boolean isVerified(long userId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("update UserEntity set is_verified" + " where userId=:userId");
+		Query query = session.createQuery("update UserEntity set is_verified=:verified" + " where userId=:userId");
 		query.setParameter("verified", true);
 		query.setParameter("userId", userId);
 		int affectedRows = query.executeUpdate();
+		System.out.println(affectedRows);
 		if(affectedRows > 0)
 			return true;
 		return false;
