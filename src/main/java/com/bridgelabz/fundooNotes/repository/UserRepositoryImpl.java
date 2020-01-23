@@ -3,7 +3,7 @@ package com.bridgelabz.fundooNotes.repository;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 
 @Repository
+@SuppressWarnings("rawtypes")
 public class UserRepositoryImpl implements IUserRepository {
 	
 	@Autowired
