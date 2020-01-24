@@ -53,6 +53,4 @@ public class UserRepositoryImpl implements IUserRepository {
 			return true;
 		return false;
 	}
-
-	
 }
