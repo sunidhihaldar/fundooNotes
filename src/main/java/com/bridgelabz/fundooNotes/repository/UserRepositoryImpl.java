@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.bridgelabz.fundooNotes.dto.UpdatePassword;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 
 @Repository
@@ -48,9 +49,18 @@ public class UserRepositoryImpl implements IUserRepository {
 		query.setParameter("verified", true);
 		query.setParameter("userId", userId);
 		int affectedRows = query.executeUpdate();
-		System.out.println(affectedRows);
 		if(affectedRows > 0)
 			return true;
+		return false;
+	}
+
+	@Override
+	public boolean updatePassword(UpdatePassword updatePassword, long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("update UserEntity set password=:updatedPassword" + "where userId=:userId");
+		query.setParameter("updatedPassword", updatePassword.getConfirmPassword());
+		query.setParameter("userId", userId);
+		query.executeUpdate();
 		return false;
 	}
 }

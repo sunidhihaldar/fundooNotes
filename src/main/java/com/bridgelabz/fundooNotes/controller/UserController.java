@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundooNotes.dto.LoginDetails;
+import com.bridgelabz.fundooNotes.dto.UpdatePassword;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.response.UserAuthenticationResponse;
@@ -60,5 +62,20 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new UserAuthenticationResponse("login failed", 400, loginInfo));
+	}
+
+	@PostMapping("updatePassword/{token}")
+	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
+			@RequestBody UpdatePassword pwd) {
+		boolean result = service.updatePassword(token, pwd);
+		return (result) ? ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Password updated", 200))
+				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Password not updated", 400));
+	}
+
+	@PostMapping("forgotPassword")
+	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) {
+		boolean result = service.isUserAvailable(email);
+		return (result) ? ResponseEntity.status(HttpStatus.FOUND).body(new Response("User found", 200))
+				: ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new Response("User not verified", 400));
 	}
 }

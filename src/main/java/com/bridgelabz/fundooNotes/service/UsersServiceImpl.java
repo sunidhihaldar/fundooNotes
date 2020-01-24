@@ -80,17 +80,34 @@ public class UsersServiceImpl implements IUserService {
 	}
 
 	@Override
-	public UserEntity updatePassword(String token, UpdatePassword password) {
-		if(password.getNewPassword().equals(password.getConfirmPassword())) {
-			long userid = generate.parseJWT(token);
-			UserEntity user = userRepository.getUser(userid);
-			if(user != null) {
+	public boolean updatePassword(String token, UpdatePassword password) {
+		if (password.getNewPassword().equals(password.getConfirmPassword())) {
+			UserEntity user = userRepository.getUser(generate.parseJWT(token));
+			if (user != null) {
 				user.setPassword(bCryptPasswordEncoder.encode(password.getNewPassword()));
 				userRepository.save(user);
-				return user;
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
-	
+
+	@Override
+	public boolean isUserAvailable(String email) {
+		UserEntity isUserAvailable = userRepository.getUser(email);
+		if (isUserAvailable != null) {
+			if (isUserAvailable.isVerified()) {
+				String response = MailResponse.formMessage("http://localhost:8081/user/updatePassword",
+						generate.createJwtToken(isUserAvailable.getUserId()));
+				mailServiceProvider.sendEmail(isUserAvailable.getEmail(), "Update password link", response);
+				return true;
+			}
+			// if user is not verified
+			String response = MailResponse.formMessage("http://localhost:8081/user/verification",
+					generate.createJwtToken(isUserAvailable.getUserId()));
+			mailServiceProvider.sendEmail(isUserAvailable.getEmail(), "Registration  verification", response);
+			return false;
+		}
+		throw new UserNotFoundException("User not found");
+	}
 }

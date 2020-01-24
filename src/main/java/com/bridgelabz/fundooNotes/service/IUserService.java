@@ -17,6 +17,8 @@ public interface IUserService {
 	
 	public UserEntity login(LoginDetails login);
 	
-	public UserEntity updatePassword(String token, UpdatePassword password);
-
+	public boolean updatePassword(String token, UpdatePassword password);
+	
+	public boolean isUserAvailable(String email);
+	
 }
