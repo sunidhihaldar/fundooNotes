@@ -1,15 +1,17 @@
 package com.bridgelabz.fundooNotes.response;
 
 //Response class for login
-public class MailObject {
+public class UserAuthenticationResponse {
  
 	private String tokenCode;
 	private int statusCode;
+	private Object object;
 	
-	public MailObject(String tokenCode, int statusCode) {
+	public UserAuthenticationResponse(String tokenCode, int statusCode, Object object) {
 		super();
 		this.tokenCode = tokenCode;
 		this.statusCode = statusCode;
+		this.object = object;
 	}
 	
 	public String getTokenCode() {
@@ -23,5 +25,13 @@ public class MailObject {
 	}
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
+	}
+
+	public Object getObject() {
+		return object;
+	}
+
+	public void setObject(Object object) {
+		this.object = object;
 	}
 }

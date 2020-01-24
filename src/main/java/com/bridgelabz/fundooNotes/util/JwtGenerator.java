@@ -15,7 +15,7 @@ public class JwtGenerator {
 	private static final String SECRET = "123456789";
 
 	// generate JWT token
-	public String jwtToken(long l) {
+	public String createJwtToken(long l) {
 		String token = null;
 		try {
 			token = JWT.create().withClaim("id", 1).sign(Algorithm.HMAC512(SECRET));
