@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundooNotes.dto.LoginDetails;
 //import com.bridgelabz.fundooNotes.customException.EmailAlreadyExistsException;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
@@ -54,4 +55,16 @@ public class UsersServiceImpl implements IUserService {
 		return true;
 	}
 
+	@Override
+	public UserEntity login(LoginDetails login) {
+		UserEntity user = userRepository.getUser(login.getEmail());
+		if(user != null) {
+			if(user.isVerified() && bCryptPasswordEncoder.matches(login.getPassword(), user.getPassword()))
+				return user;
+			String response = MailResponse.formMessage("http://localhost:8081/user/verification", generate.jwtToken(user.getUserId()));
+			mailServiceProvider.sendEmail(user.getEmail(), "login", response);
+			return user;
+		}
+		return null;
+	}
 }

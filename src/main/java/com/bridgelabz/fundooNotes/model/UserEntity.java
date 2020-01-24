@@ -96,6 +96,14 @@ public class UserEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public boolean isVerified() {
+		return isVerified;
+	}
+	
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
 
 	public String getCreatedAt() {
 		return createdAt;
