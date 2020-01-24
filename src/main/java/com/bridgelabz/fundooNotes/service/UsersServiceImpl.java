@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundooNotes.customException.UserNotFoundException;
 import com.bridgelabz.fundooNotes.customException.UserNotVerifiedException;
 import com.bridgelabz.fundooNotes.dto.LoginDetails;
+import com.bridgelabz.fundooNotes.dto.UpdatePassword;
 //import com.bridgelabz.fundooNotes.customException.EmailAlreadyExistsException;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
@@ -72,10 +73,24 @@ public class UsersServiceImpl implements IUserService {
 			String response = MailResponse.formMessage("http://localhost:8081/user/verification",
 					generate.createJwtToken(user.getUserId()));
 			mailServiceProvider.sendEmail(user.getEmail(), "Registration  verification", response);
-			throw new UserNotVerifiedException("User not verified, verify your user");
+			throw new UserNotVerifiedException("User not verified");
 		}
 		// user does not exist
 		throw new UserNotFoundException("User not found! ");
+	}
+
+	@Override
+	public UserEntity updatePassword(String token, UpdatePassword password) {
+		if(password.getNewPassword().equals(password.getConfirmPassword())) {
+			long userid = generate.parseJWT(token);
+			UserEntity user = userRepository.getUser(userid);
+			if(user != null) {
+				user.setPassword(bCryptPasswordEncoder.encode(password.getNewPassword()));
+				userRepository.save(user);
+				return user;
+			}
+		}
+		return null;
 	}
 	
 }
