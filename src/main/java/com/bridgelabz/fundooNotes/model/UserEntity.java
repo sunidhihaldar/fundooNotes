@@ -7,6 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * This model class acts like an entity and has parameters that gets stored in the database
+ * @author Sunidhi Haldar
+ * @created 2020-01-17
+ * @version 1.8
+ */
+
 @Entity
 @Table(name="user")
 public class UserEntity {

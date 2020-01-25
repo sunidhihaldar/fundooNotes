@@ -7,8 +7,14 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * This class acts like a DTO-Data Access Object, contains the details to be asked to the user
+ * @author Sunidhi Haldar
+ * @created 2020-01-17
+ * @version 1.8
+ */
+
 @Component
-//Data transfer object class, contains details to be asked to the user
 public class UserDto {
 
 	@NotBlank

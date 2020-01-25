@@ -1,5 +1,12 @@
 package com.bridgelabz.fundooNotes.dto;
 
+/**
+ * This class provides login details like email and password
+ * @author Sunidhi Haldar
+ * @created 2020-01-23
+ * @version 1.8
+ */
+
 public class LoginDetails {
 
 	private String email;

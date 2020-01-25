@@ -1,5 +1,12 @@
 package com.bridgelabz.fundooNotes.dto;
 
+/**
+ * This class provides credentials for updating password like new password and confirm password
+ * @author Sunidhi Haldar
+ * @created 2020-01-24
+ * @version 1.8
+ */
+
 public class UpdatePassword {
 
 	private String newPassword;
