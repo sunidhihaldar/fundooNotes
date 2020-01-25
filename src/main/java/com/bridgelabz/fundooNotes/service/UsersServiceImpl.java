@@ -67,27 +67,26 @@ public class UsersServiceImpl implements IUserService {
 		if (user != null) {
 			// if user is verified and encrypted raw password matches the already stored
 			// encrypted password then returns user
-			if (user.isVerified() && bCryptPasswordEncoder.matches(login.getPassword(), user.getPassword()))
-				return user;
-			// else sends a link
-			String response = MailResponse.formMessage("http://localhost:8081/user/verification",
-					generate.createJwtToken(user.getUserId()));
-			mailServiceProvider.sendEmail(user.getEmail(), "Registration  verification", response);
-			throw new UserNotVerifiedException("User not verified");
+			if (bCryptPasswordEncoder.matches(login.getPassword(), user.getPassword())) {
+				if (user.isVerified())
+					return user;
+				// else sends a link
+				String response = MailResponse.formMessage("http://localhost:8081/user/verification",
+						generate.createJwtToken(user.getUserId()));
+				mailServiceProvider.sendEmail(user.getEmail(), "Registration  verification", response);
+				return null;
+			}
+			throw new UserNotVerifiedException("Invalid credentials");
 		}
 		// user does not exist
 		throw new UserNotFoundException("User not found! ");
 	}
 
 	@Override
-	public boolean updatePassword(String token, UpdatePassword password) {
-		if (password.getNewPassword().equals(password.getConfirmPassword())) {
-			UserEntity user = userRepository.getUser(generate.parseJWT(token));
-			if (user != null) {
-				user.setPassword(bCryptPasswordEncoder.encode(password.getNewPassword()));
-				userRepository.save(user);
-				return true;
-			}
+	public boolean updatePassword(String token, UpdatePassword passwordInfo) {
+		if (passwordInfo.getNewPassword().equals(passwordInfo.getConfirmPassword())) {
+			passwordInfo.setConfirmPassword(bCryptPasswordEncoder.encode(passwordInfo.getConfirmPassword()));
+			userRepository.updatePassword(passwordInfo, generate.parseJWT(token));
 		}
 		return false;
 	}

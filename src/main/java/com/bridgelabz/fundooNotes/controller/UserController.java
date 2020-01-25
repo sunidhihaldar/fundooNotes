@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,8 +17,8 @@ import com.bridgelabz.fundooNotes.dto.LoginDetails;
 import com.bridgelabz.fundooNotes.dto.UpdatePassword;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
-import com.bridgelabz.fundooNotes.response.UserAuthenticationResponse;
 import com.bridgelabz.fundooNotes.response.Response;
+import com.bridgelabz.fundooNotes.response.UserAuthenticationResponse;
 import com.bridgelabz.fundooNotes.service.IUserService;
 import com.bridgelabz.fundooNotes.util.JwtGenerator;
 
@@ -64,7 +65,7 @@ public class UserController {
 				.body(new UserAuthenticationResponse("login failed", 400, loginInfo));
 	}
 
-	@PostMapping("updatePassword/{token}")
+	@PutMapping("updatePassword/{token}")
 	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
 			@RequestBody UpdatePassword pwd) {
 		boolean result = service.updatePassword(token, pwd);
