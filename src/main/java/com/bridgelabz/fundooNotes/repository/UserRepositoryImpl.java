@@ -52,6 +52,7 @@ public class UserRepositoryImpl implements IUserRepository {
 		if(affectedRows > 0)
 			return true;
 		return false;
+//		return (affectedRows > 0) ? true : false;
 	}
 
 	@Override

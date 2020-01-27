@@ -21,9 +21,9 @@ public class NoteRepository {
 		return note;
 	}
 	
-	public NoteDto findById(long userId) {
-		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("");
-		session.setp
-	}
+//	public NoteDto findById(long userId) {
+//		Session session = entityManager.unwrap(Session.class);
+//		Query query = session.createQuery("");
+//		return userId;
+//	}
 }

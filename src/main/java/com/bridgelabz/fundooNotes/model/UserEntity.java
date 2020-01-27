@@ -1,5 +1,7 @@
 package com.bridgelabz.fundooNotes.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,6 +44,8 @@ public class UserEntity {
 	private boolean isVerified;
 	
 	private String createdAt;
+	
+	private List<NoteInfo> note;
 
 	public UserEntity(long userId, String firstName, String lastName, String email, long mobileNumber,
 			String password) {
@@ -118,5 +122,13 @@ public class UserEntity {
 	
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public List<NoteInfo> getNote() {
+		return note;
+	}
+
+	public void setNote(List<NoteInfo> note) {
+		this.note = note;
 	}
 }
