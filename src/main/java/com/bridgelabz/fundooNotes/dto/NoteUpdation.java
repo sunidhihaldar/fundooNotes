@@ -16,8 +16,6 @@ public class NoteUpdation {
 
 	private boolean isTrashed;
 
-	private LocalDateTime createdAt;
-
 	private LocalDateTime updatedAt;
 
 	public long getNoteId() {
@@ -66,14 +64,6 @@ public class NoteUpdation {
 
 	public void setTrashed(boolean isTrashed) {
 		this.isTrashed = isTrashed;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
 	}
 
 	public LocalDateTime getUpdatedAt() {
