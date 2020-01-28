@@ -52,8 +52,8 @@ public class NoteServiceImpl implements INoteService {
 		throw new UserNotFoundException("User does not exist");
 	}
 
-	@Override
 	@Transactional
+	@Override
 	public boolean updateNote(NoteUpdation updateNote, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
@@ -90,8 +90,48 @@ public class NoteServiceImpl implements INoteService {
 		}
 		throw new UserNotFoundException("User not found");
 	}
-	
-	
-	
+
+	@Transactional
+	@Override
+	public boolean archiveNote(long noteId, String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			NoteInfo note = noteRepository.findById(noteId);
+			if(note != null) {
+				if(!note.isArchived()) {
+					note.setArchived(true);
+					note.setUpdatedAt(LocalDateTime.now());
+					noteRepository.save(note);
+					return true;
+				}
+				throw new NoteNotFoundException("note already archived");
+			}
+			throw new NoteNotFoundException("Note not found");
+		}
+		throw new UserNotFoundException("User not found");
+	}
+
+	@Transactional
+	@Override
+	public boolean pinNote(long noteId, String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			NoteInfo note = noteRepository.findById(noteId);
+			if(note != null) {
+				if(!note.isPinned()) {
+					note.setPinned(true);
+					note.setUpdatedAt(LocalDateTime.now());
+					noteRepository.save(note);
+					return true;
+				}
+				throw new NoteNotFoundException("note already pinned");
+			}
+			throw new NoteNotFoundException("Note not found");
+		}
+		throw new UserNotFoundException("User not found");
+	}
+
 	
 }

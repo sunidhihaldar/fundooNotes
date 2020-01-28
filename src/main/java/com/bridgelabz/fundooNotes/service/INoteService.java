@@ -10,4 +10,8 @@ public interface INoteService {
 	public boolean updateNote(NoteUpdation updateNote, String token);
 	
 	public boolean deleteNote(long noteId, String token);
+	
+	public boolean archiveNote(long noteId, String token);
+	
+	public boolean pinNote(long noteId, String token);
 }

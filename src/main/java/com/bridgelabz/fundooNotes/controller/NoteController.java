@@ -43,4 +43,18 @@ public class NoteController {
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note deleted", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Note not found", 404));
 	}
+	
+	@PostMapping("archive/{noteId}")
+	public ResponseEntity<Response> archiveNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
+		boolean result = noteService.archiveNote(noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note archived", 200))
+				: ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("Note not found", 208));
+	}
+	
+	@PostMapping("pin/{noteId}")
+	public ResponseEntity<Response> pinNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
+		boolean result = noteService.pinNote(noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note pinned", 200))
+				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Note not found", 502));
+	}
 }
