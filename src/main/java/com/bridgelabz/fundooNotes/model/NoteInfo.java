@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,32 +15,29 @@ public class NoteInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "note_id")
 	private long noteId;
-	
+
 	private String title;
-	
-	private String descripton;
-	
+
+	private String description;
+
 	@Column(columnDefinition = "boolean default false")
 	private boolean isPinned;
-	
+
 	@Column(columnDefinition = "boolean default false")
 	private boolean isArchived;
-	
+
 	@Column(columnDefinition = "boolean default false")
 	private boolean isTrashed;
-	
+
 	private LocalDateTime createdAt;
-	
+
 	private LocalDateTime updatedAt;
-	
+
 	private String colour;
-	
+
 	private LocalDateTime reminder;
-	
-	@ManyToOne
-	@JoinColumn(name = "userId")
-	private UserEntity userNotes;
 
 	public long getNoteId() {
 		return noteId;
@@ -58,14 +53,6 @@ public class NoteInfo {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getDescripton() {
-		return descripton;
-	}
-
-	public void setDescripton(String descripton) {
-		this.descripton = descripton;
 	}
 
 	public boolean isPinned() {
@@ -124,11 +111,11 @@ public class NoteInfo {
 		this.reminder = reminder;
 	}
 
-	public UserEntity getUserNotes() {
-		return userNotes;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setUserNotes(UserEntity userNotes) {
-		this.userNotes = userNotes;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

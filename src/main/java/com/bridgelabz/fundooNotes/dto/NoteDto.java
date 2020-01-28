@@ -1,16 +1,12 @@
 package com.bridgelabz.fundooNotes.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NoteDto {
 
-	@NotBlank
-	@Pattern(regexp = "[a-zA-z]*", message = "only alphabets are allowed")
 	private String title;
 	
-	@NotBlank
-	@Pattern(regexp = "[a-zA-z]*", message = "only alphabets are allowed")
 	private String description;
 	
 	public String getTitle() {

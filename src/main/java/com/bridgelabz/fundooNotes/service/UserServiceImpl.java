@@ -21,7 +21,7 @@ import com.bridgelabz.fundooNotes.util.Utility;
 
 //used to load user details from a database
 @Service
-public class UsersServiceImpl implements IUserService {
+public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;

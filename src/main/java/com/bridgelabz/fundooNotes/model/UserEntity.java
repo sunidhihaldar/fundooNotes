@@ -2,11 +2,14 @@ package com.bridgelabz.fundooNotes.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -45,6 +48,8 @@ public class UserEntity {
 	
 	private String createdAt;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
 	private List<NoteInfo> note;
 
 	public UserEntity(long userId, String firstName, String lastName, String email, long mobileNumber,
