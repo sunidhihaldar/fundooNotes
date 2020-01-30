@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
+import com.bridgelabz.fundooNotes.dto.ReminderDto;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.INoteService;
@@ -99,26 +100,28 @@ public class NoteController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}
-	
+
 	@GetMapping("getAllNotes/archived")
 	public ResponseEntity<Response> getAllArchivedNotes(@RequestHeader("token") String token) {
 		List<NoteInfo> list = noteService.getAllArchivedNotes(token);
-		if(!list.isEmpty()) {
+		if (!list.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("All archived notes are ", 200, list));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}
-	
+
 	@PutMapping("updateColour/{noteId}")
-	public ResponseEntity<Response> updateColour(@PathVariable long noteId, @RequestHeader("token") String token, @RequestParam String colour) {
+	public ResponseEntity<Response> updateColour(@PathVariable long noteId, @RequestHeader("token") String token,
+			@RequestParam String colour) {
 		boolean result = noteService.updateColour(noteId, token, colour);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Colour updated", 200))
 				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Colour not updated", 304));
 	}
-	
+
 	@PutMapping("setReminder/{noteId}")
-	public ResponseEntity<Response> setReminder(@PathVariable long noteId, @RequestHeader("token") String token) {
-		boolean result = noteService.setReminderNote(noteId, token);
+	public ResponseEntity<Response> setReminder(@PathVariable long noteId, @RequestHeader("token") String token,
+			@RequestBody ReminderDto reminderDto) {
+		boolean result = noteService.setReminderNote(noteId, token, reminderDto);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder set", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Reminder not set", 404));
 	}

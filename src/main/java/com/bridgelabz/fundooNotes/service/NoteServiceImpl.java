@@ -14,6 +14,7 @@ import com.bridgelabz.fundooNotes.customException.UserNotFoundException;
 import com.bridgelabz.fundooNotes.customException.UserNotVerifiedException;
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
+import com.bridgelabz.fundooNotes.dto.ReminderDto;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.repository.IUserRepository;
@@ -231,13 +232,14 @@ public class NoteServiceImpl implements INoteService {
 
 	@Transactional
 	@Override
-	public boolean setReminderNote(long noteId, String token) {
+	public boolean setReminderNote(long noteId, String token, ReminderDto reminderDto) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
 		if(user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
 			if(note != null) {
-				note.setReminder(LocalDateTime.now());
+				note.setReminder(reminderDto.getTime());
+				note.setUpdatedAt(LocalDateTime.now());
 				noteRepository.save(note);
 				return true;
 			}
