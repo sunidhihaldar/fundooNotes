@@ -1,6 +1,9 @@
 package com.bridgelabz.fundooNotes.repository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -10,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 
 @Repository
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class NoteRepository {
 
 	@Autowired
@@ -37,5 +40,21 @@ public class NoteRepository {
 		if(result > 0)
 			return true;
 		return false;
+	}
+	
+	@Transactional
+	public List<NoteInfo> getAllNotes(long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query selectQuery = session.createQuery("FROM NoteInfo where user_id=:userId and is_trashed=false and is_archived=false");
+		selectQuery.setParameter("userId", userId);
+		return selectQuery.getResultList();
+	}
+	
+	@Transactional
+	public List<NoteInfo> getAllPinnedNotes(long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query selectQuery = session.createQuery("FROM NoteInfo where user_id=userId and is_pinned=true");
+		selectQuery.setParameter("userId", userId);
+		return selectQuery.getResultList();
 	}
 }

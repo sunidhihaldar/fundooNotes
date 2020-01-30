@@ -1,8 +1,11 @@
 package com.bridgelabz.fundooNotes.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
+import com.bridgelabz.fundooNotes.model.NoteInfo;
+import com.bridgelabz.fundooNotes.repository.NoteRepository;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.INoteService;
 
@@ -64,5 +69,14 @@ public class NoteController {
 		boolean result = noteService.trashNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note trashed", 200))
 				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Error, check your noteId", 502));
+	}
+	
+	@GetMapping("getAllNotes")
+	public ResponseEntity<Response> getAllNotes(@RequestHeader("token") String token) {
+		List<NoteInfo> list = noteService.getAllNotes(token);
+		if(list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list ", 404));
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes are ", 200, list));
 	}
 }

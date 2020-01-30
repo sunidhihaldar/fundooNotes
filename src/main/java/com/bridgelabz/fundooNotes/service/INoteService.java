@@ -1,7 +1,10 @@
 package com.bridgelabz.fundooNotes.service;
 
+import java.util.List;
+
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
+import com.bridgelabz.fundooNotes.model.NoteInfo;
 
 public interface INoteService {
 
@@ -16,4 +19,6 @@ public interface INoteService {
 	public boolean pinNote(long noteId, String token);
 	
 	public boolean trashNote(long noteId, String token);
+	
+	public List<NoteInfo> getAllNotes(String token);
 }
