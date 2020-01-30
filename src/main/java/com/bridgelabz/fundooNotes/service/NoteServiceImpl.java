@@ -133,5 +133,26 @@ public class NoteServiceImpl implements INoteService {
 		throw new UserNotFoundException("User not found");
 	}
 
+	@Transactional
+	@Override
+	public boolean trashNote(long noteId, String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			NoteInfo note = noteRepository.findById(noteId);
+			if(note != null) {
+				if(!note.isTrashed()) {
+					note.setTrashed(true);
+					note.setUpdatedAt(LocalDateTime.now());
+					noteRepository.save(note);
+					return true;
+				}
+				return false;
+			}
+			throw new NoteNotFoundException("Note not found");
+		}
+		throw new UserNotFoundException("User not found");
+	}
+
 	
 }

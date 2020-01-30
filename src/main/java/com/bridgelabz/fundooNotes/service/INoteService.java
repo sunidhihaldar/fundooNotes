@@ -14,4 +14,6 @@ public interface INoteService {
 	public boolean archiveNote(long noteId, String token);
 	
 	public boolean pinNote(long noteId, String token);
+	
+	public boolean trashNote(long noteId, String token);
 }

@@ -27,34 +27,42 @@ public class NoteController {
 	public ResponseEntity<Response> createNote(@RequestBody NoteDto note, @RequestHeader String token) {
 		boolean result = noteService.createNote(note, token);
 		return (result) ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("note created", 200, note))
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("note not created", 404, note));
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 404, note));
 	}
-	
+
 	@PutMapping("upadteNote")
 	public ResponseEntity<Response> updateNote(@RequestBody NoteUpdation update, @RequestHeader("token") String token) {
 		boolean result = noteService.updateNote(update, token);
 		return (result) ? ResponseEntity.status(HttpStatus.FOUND).body(new Response("Note updated", 200))
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Note not found", 400));
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 400));
 	}
-	
+
 	@PostMapping("delete/{noteId}")
-	public ResponseEntity<Response> deleteNote(@PathVariable("noteId") long noteId, @RequestHeader("token") String token) {
+	public ResponseEntity<Response> deleteNotePermanently(@PathVariable("noteId") long noteId,
+			@RequestHeader("token") String token) {
 		boolean result = noteService.deleteNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note deleted", 200))
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Note not found", 404));
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 404));
 	}
-	
+
 	@PostMapping("archive/{noteId}")
 	public ResponseEntity<Response> archiveNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
 		boolean result = noteService.archiveNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note archived", 200))
-				: ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("Note not found", 208));
+				: ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("Error, check your noteId", 208));
 	}
-	
+
 	@PostMapping("pin/{noteId}")
 	public ResponseEntity<Response> pinNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
 		boolean result = noteService.pinNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note pinned", 200))
-				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Note not found", 502));
+				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Error, check your noteId", 502));
+	}
+
+	@PostMapping("trash/{noteId}")
+	public ResponseEntity<Response> trashNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
+		boolean result = noteService.trashNote(noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note trashed", 200))
+				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Error, check your noteId", 502));
 	}
 }
