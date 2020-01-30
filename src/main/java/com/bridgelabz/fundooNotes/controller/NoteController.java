@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundooNotes.dto.NoteDto;
@@ -37,7 +38,7 @@ public class NoteController {
 	@PutMapping("updateNote")
 	public ResponseEntity<Response> updateNote(@RequestBody NoteUpdation update, @RequestHeader("token") String token) {
 		boolean result = noteService.updateNote(update, token);
-		return (result) ? ResponseEntity.status(HttpStatus.FOUND).body(new Response("Note updated", 200))
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note updated", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 400));
 	}
 
@@ -110,7 +111,7 @@ public class NoteController {
 	}
 	
 	@PutMapping("updateColour/{noteId}")
-	public ResponseEntity<Response> updateColour(@PathVariable long noteId, @RequestHeader("token") String token, String colour) {
+	public ResponseEntity<Response> updateColour(@PathVariable long noteId, @RequestHeader("token") String token, @RequestParam String colour) {
 		boolean result = noteService.updateColour(noteId, token, colour);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Colour updated", 200))
 				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Colour not updated", 304));
