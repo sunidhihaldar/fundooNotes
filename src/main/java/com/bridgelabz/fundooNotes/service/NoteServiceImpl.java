@@ -211,4 +211,22 @@ public class NoteServiceImpl implements INoteService {
 		throw new UserNotFoundException("User not found");
 	}
 
+	@Transactional
+	@Override
+	public boolean updateColour(long noteId, String token, String colour) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			NoteInfo note = noteRepository.findById(noteId);
+			if(note != null) {
+				note.setColour(colour);
+				note.setUpdatedAt(LocalDateTime.now());
+				noteRepository.save(note);
+				return true;
+			}
+			throw new NoteNotFoundException("Note not found");
+		}
+		throw new UserNotFoundException("User not found");
+	}
+
 }

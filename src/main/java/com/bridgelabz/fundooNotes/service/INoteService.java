@@ -27,4 +27,6 @@ public interface INoteService {
 	public List<NoteInfo> getAllTrashedNotes(String token);
 	
 	public List<NoteInfo> getAllArchivedNotes(String token);
+	
+	public boolean updateColour(long noteId, String token, String colour);
 }

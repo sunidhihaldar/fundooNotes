@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
-import com.bridgelabz.fundooNotes.repository.NoteRepository;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.INoteService;
-
-import net.bytebuddy.asm.Advice.Return;
 
 @RestController
 @RequestMapping("note")
@@ -110,5 +107,12 @@ public class NoteController {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("All archived notes are ", 200, list));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
+	}
+	
+	@PutMapping("updateColour/{noteId}")
+	public ResponseEntity<Response> updateColour(@PathVariable long noteId, @RequestHeader("token") String token, String colour) {
+		boolean result = noteService.updateColour(noteId, token, colour);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Colour updated", 200))
+				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Colour not updated", 304));
 	}
 }

@@ -46,24 +46,25 @@ public class NoteRepository {
 	public List<NoteInfo> getAllNotes(long userId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query selectQuery = session
-				.createQuery("FROM NoteInfo where user_id=:userId and is_trashed=false and is_archived=false");
-		selectQuery.setParameter("userId", userId);
+				.createQuery("FROM NoteInfo where user_id=:id and is_trashed=false and is_archived=false");
+		selectQuery.setParameter("id", userId);
 		return selectQuery.getResultList();
 	}
 
 	@Transactional
 	public List<NoteInfo> getAllPinnedNotes(long userId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query selectQuery = session.createQuery("FROM NoteInfo where user_id=:userId and is_pinned=true");
-		selectQuery.setParameter("userId", userId);
+		Query selectQuery = session.createQuery("FROM NoteInfo where user_id=:id and is_pinned=true");
+		selectQuery.setParameter("id", userId);
 		return selectQuery.getResultList();
 	}
 
 	@Transactional
 	public List<NoteInfo> getAllTrashedNotes(long userId) {
 		Session session = entityManager.unwrap(Session.class);
-		return session.createQuery("From NoteInfo where user_id=:userId and is_trashed=true")
-				.setParameter("userId", userId).getResultList();
+		Query selectQuery = session.createQuery("From NoteInfo where user_id=:userId and is_trashed=true");
+		selectQuery.setParameter("userId", userId);
+		return selectQuery.getResultList();
 	}
 
 	@Transactional
