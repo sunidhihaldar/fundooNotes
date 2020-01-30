@@ -75,10 +75,10 @@ public class NoteController {
 	@GetMapping("getAllNotes")
 	public ResponseEntity<Response> getAllNotes(@RequestHeader("token") String token) {
 		List<NoteInfo> list = noteService.getAllNotes(token);
-		if (list.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list ", 404));
+		if (!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes are ", 200, list));
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes are ", 200, list));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list ", 404));
 	}
 
 	@GetMapping("getAllNotes/pinned")
@@ -87,7 +87,16 @@ public class NoteController {
 
 		if (!list.isEmpty()) {
 
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("All pinned notes are", 200,list));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All pinned notes are", 200, list));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
+	}
+
+	@GetMapping("getAllNotes/trashed")
+	public ResponseEntity<Response> getAllTrashedNotes(String token) {
+		List<NoteInfo> list = noteService.getAllTrashedNotes(token);
+		if (!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All trashed notes are", 200, list));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}

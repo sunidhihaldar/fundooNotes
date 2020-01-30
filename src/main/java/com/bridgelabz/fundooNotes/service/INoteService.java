@@ -23,4 +23,6 @@ public interface INoteService {
 	public List<NoteInfo> getAllNotes(String token);
 	
 	public List<NoteInfo> getAllPinnedNotes(String token);
+	
+	public List<NoteInfo> getAllTrashedNotes(String token);
 }

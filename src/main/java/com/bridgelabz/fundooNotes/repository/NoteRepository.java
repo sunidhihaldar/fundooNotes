@@ -58,4 +58,11 @@ public class NoteRepository {
 		selectQuery.setParameter("userId", userId);
 		return selectQuery.getResultList();
 	}
+
+	@Transactional
+	public List<NoteInfo> getAllTrashedNotes(long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		return session.createQuery("From NoteInfo where user_id=:userId and is_trashed=true")
+				.setParameter("userId", userId).getResultList();
+	}
 }
