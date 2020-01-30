@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,7 @@ public class NoteController {
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 400));
 	}
 
-	@PostMapping("delete/{noteId}")
+	@DeleteMapping("delete/{noteId}")
 	public ResponseEntity<Response> deleteNotePermanently(@PathVariable("noteId") long noteId,
 			@RequestHeader("token") String token) {
 		boolean result = noteService.deleteNote(noteId, token);
@@ -84,9 +85,7 @@ public class NoteController {
 	@GetMapping("getAllNotes/pinned")
 	public ResponseEntity<Response> getAllPinnedNotes(@RequestHeader("token") String token) {
 		List<NoteInfo> list = noteService.getAllPinnedNotes(token);
-
 		if (!list.isEmpty()) {
-
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("All pinned notes are", 200, list));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
@@ -115,5 +114,12 @@ public class NoteController {
 		boolean result = noteService.updateColour(noteId, token, colour);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Colour updated", 200))
 				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Colour not updated", 304));
+	}
+	
+	@PutMapping("setReminder/{noteId}")
+	public ResponseEntity<Response> setReminder(@PathVariable long noteId, @RequestHeader("token") String token) {
+		boolean result = noteService.setReminderNote(noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder set", 200))
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Reminder not set", 404));
 	}
 }

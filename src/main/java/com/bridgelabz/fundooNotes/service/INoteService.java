@@ -29,4 +29,6 @@ public interface INoteService {
 	public List<NoteInfo> getAllArchivedNotes(String token);
 	
 	public boolean updateColour(long noteId, String token, String colour);
+	
+	public boolean setReminderNote(long noteId, String token);
 }
