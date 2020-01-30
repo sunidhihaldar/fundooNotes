@@ -21,6 +21,8 @@ import com.bridgelabz.fundooNotes.repository.NoteRepository;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.INoteService;
 
+import net.bytebuddy.asm.Advice.Return;
+
 @RestController
 @RequestMapping("note")
 public class NoteController {
@@ -82,7 +84,7 @@ public class NoteController {
 	}
 
 	@GetMapping("getAllNotes/pinned")
-	public ResponseEntity<Response> getAllPinnedNotes(String token) {
+	public ResponseEntity<Response> getAllPinnedNotes(@RequestHeader("token") String token) {
 		List<NoteInfo> list = noteService.getAllPinnedNotes(token);
 
 		if (!list.isEmpty()) {
@@ -93,10 +95,19 @@ public class NoteController {
 	}
 
 	@GetMapping("getAllNotes/trashed")
-	public ResponseEntity<Response> getAllTrashedNotes(String token) {
+	public ResponseEntity<Response> getAllTrashedNotes(@RequestHeader("token") String token) {
 		List<NoteInfo> list = noteService.getAllTrashedNotes(token);
 		if (!list.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("All trashed notes are", 200, list));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
+	}
+	
+	@GetMapping("getAllNotes/archived")
+	public ResponseEntity<Response> getAllArchivedNotes(@RequestHeader("token") String token) {
+		List<NoteInfo> list = noteService.getAllArchivedNotes(token);
+		if(!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All archived notes are ", 200, list));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}

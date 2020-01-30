@@ -197,4 +197,18 @@ public class NoteServiceImpl implements INoteService {
 		throw new UserNotFoundException("User not found");
 	}
 
+	@Override
+	public List<NoteInfo> getAllArchivedNotes(String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			List<NoteInfo> fetchedNotes = noteRepository.getAllArchivedNotes(user.getUserId());
+			if(!fetchedNotes.isEmpty()) {
+				return fetchedNotes;
+			}
+			return fetchedNotes;
+		}
+		throw new UserNotFoundException("User not found");
+	}
+
 }

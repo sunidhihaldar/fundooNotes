@@ -65,4 +65,11 @@ public class NoteRepository {
 		return session.createQuery("From NoteInfo where user_id=:userId and is_trashed=true")
 				.setParameter("userId", userId).getResultList();
 	}
+
+	@Transactional
+	public List<NoteInfo> getAllArchivedNotes(long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		return session.createQuery("FROM NoteInfo where user_id=:userId and is_archived=true")
+				.setParameter("userId", userId).getResultList();
+	}
 }
