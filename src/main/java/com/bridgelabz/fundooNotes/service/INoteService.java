@@ -21,4 +21,6 @@ public interface INoteService {
 	public boolean trashNote(long noteId, String token);
 	
 	public List<NoteInfo> getAllNotes(String token);
+	
+	public List<NoteInfo> getAllPinnedNotes(String token);
 }

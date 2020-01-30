@@ -35,7 +35,7 @@ public class NoteController {
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 404, note));
 	}
 
-	@PutMapping("upadteNote")
+	@PutMapping("updateNote")
 	public ResponseEntity<Response> updateNote(@RequestBody NoteUpdation update, @RequestHeader("token") String token) {
 		boolean result = noteService.updateNote(update, token);
 		return (result) ? ResponseEntity.status(HttpStatus.FOUND).body(new Response("Note updated", 200))
@@ -54,7 +54,8 @@ public class NoteController {
 	public ResponseEntity<Response> archiveNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
 		boolean result = noteService.archiveNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note archived", 200))
-				: ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("Error, check your noteId", 208));
+				: ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
+						.body(new Response("Error, check your noteId", 208));
 	}
 
 	@PostMapping("pin/{noteId}")
@@ -70,13 +71,24 @@ public class NoteController {
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note trashed", 200))
 				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Error, check your noteId", 502));
 	}
-	
+
 	@GetMapping("getAllNotes")
 	public ResponseEntity<Response> getAllNotes(@RequestHeader("token") String token) {
 		List<NoteInfo> list = noteService.getAllNotes(token);
-		if(list.isEmpty()) {
+		if (list.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list ", 404));
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes are ", 200, list));
+	}
+
+	@GetMapping("getAllNotes/pinned")
+	public ResponseEntity<Response> getAllPinnedNotes(String token) {
+		List<NoteInfo> list = noteService.getAllPinnedNotes(token);
+
+		if (!list.isEmpty()) {
+
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All pinned notes are", 200,list));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}
 }

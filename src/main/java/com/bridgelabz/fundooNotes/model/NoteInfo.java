@@ -118,4 +118,12 @@ public class NoteInfo {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "NoteInfo [noteId=" + noteId + ", title=" + title + ", description=" + description + ", isPinned="
+				+ isPinned + ", isArchived=" + isArchived + ", isTrashed=" + isTrashed + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", colour=" + colour + ", reminder=" + reminder + "]";
+	}
+
 }
