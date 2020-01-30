@@ -32,4 +32,6 @@ public interface INoteService {
 	public boolean updateColour(long noteId, String token, String colour);
 	
 	public boolean setReminderNote(long noteId, String token, ReminderDto reminder);
+	
+	public boolean removeReminderNote(long noteId, String token);
 }

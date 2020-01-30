@@ -125,4 +125,11 @@ public class NoteController {
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder set", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Reminder not set", 404));
 	}
+	
+	@PutMapping("removeReminder/{noteId}")
+	public ResponseEntity<Response> removeReminderNote(@PathVariable long noteId, @RequestHeader("token") String token) {
+		boolean result = noteService.removeReminderNote(noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder removed", 200))
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error removing reminder", 404));
+	}
 }
