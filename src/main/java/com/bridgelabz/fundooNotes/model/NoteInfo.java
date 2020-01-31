@@ -9,6 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * This model class acts as a note entity and the parameters gets stored in the database
+ * @author Sunidhi Haldar
+ * @created 2020-01-24
+ * @version 1.8
+ */
+
 @Entity
 @Table(name = "note")
 public class NoteInfo {

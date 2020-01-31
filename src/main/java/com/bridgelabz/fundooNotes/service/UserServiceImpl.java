@@ -19,7 +19,13 @@ import com.bridgelabz.fundooNotes.util.JwtGenerator;
 import com.bridgelabz.fundooNotes.util.MailServiceProvider;
 import com.bridgelabz.fundooNotes.util.Utility;
 
-//used to load user details from a database
+/**
+ * This class loads user details from a database
+ * @author Sunidhi Haldar
+ * @created 2020-01-17
+ * @version 1.8
+ */
+
 @Service
 public class UserServiceImpl implements IUserService {
 

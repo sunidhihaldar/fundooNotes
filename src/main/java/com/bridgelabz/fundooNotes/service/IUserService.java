@@ -6,8 +6,13 @@ import com.bridgelabz.fundooNotes.dto.LoginDetails;
 import com.bridgelabz.fundooNotes.dto.UpdatePassword;
 import com.bridgelabz.fundooNotes.dto.UserDto;
 import com.bridgelabz.fundooNotes.model.UserEntity;
+/**
+ * This interface provides unimplemented methods for user service class
+ * @author Sunidhi Haldar
+ * @created 2020-01-17
+ * @version 1.8
+ */
 
-//UserDetailsService interface is used to retrieve user-related data
 @Component
 public interface IUserService {
 

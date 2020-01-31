@@ -2,6 +2,13 @@ package com.bridgelabz.fundooNotes.dto;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class provides functionalities for updating a note
+ * @author Sunidhi Haldar
+ * @created 2020-01-27
+ * @version 1.8
+ */
+
 public class NoteUpdation {
 
 	private long noteId;

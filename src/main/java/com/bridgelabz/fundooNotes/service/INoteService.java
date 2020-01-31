@@ -7,6 +7,13 @@ import com.bridgelabz.fundooNotes.dto.NoteUpdation;
 import com.bridgelabz.fundooNotes.dto.ReminderDto;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 
+/**
+ * this interface provides unimplemented methods for functionalities of a note
+ * @author Sunidhi Haldar
+ * @created 2020-01-24
+ * @version 1.8
+ */
+
 public interface INoteService {
 
 	public boolean createNote(NoteDto note, String token);

@@ -21,6 +21,13 @@ import com.bridgelabz.fundooNotes.repository.IUserRepository;
 import com.bridgelabz.fundooNotes.repository.NoteRepository;
 import com.bridgelabz.fundooNotes.util.JwtGenerator;
 
+/**
+ * This class loads note details from database
+ * @author Sunidhi Haldar
+ * @created 2020-01-25
+ * @version 1.8
+ */
+
 @Service
 public class NoteServiceImpl implements INoteService {
 

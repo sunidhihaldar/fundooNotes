@@ -8,6 +8,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.bridgelabz.fundooNotes.response.Response;
 
+/**
+ * This class is the global response exception handler, helps to handle the custom exceptions
+ * @author Sunidhi Haldar
+ * @created 2020-01-31
+ * @version 1.8
+ */
+
 @RestControllerAdvice
 public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
