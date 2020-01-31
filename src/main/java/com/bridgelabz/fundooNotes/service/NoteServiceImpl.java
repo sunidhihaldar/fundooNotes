@@ -256,10 +256,13 @@ public class NoteServiceImpl implements INoteService {
 		if(user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
 			if(note != null) {
-				note.setReminder(null);
-				note.setUpdatedAt(LocalDateTime.now());
-				noteRepository.save(note);
-				return true;
+				if(note.getReminder() != null) {
+					note.setReminder(null);
+					note.setUpdatedAt(LocalDateTime.now());
+					noteRepository.save(note);
+					return true;
+				}
+				throw new NoteNotFoundException("Not already set null");
 			}
 			throw new NoteNotFoundException("Note not found");
 		}
