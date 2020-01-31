@@ -23,6 +23,7 @@ import com.bridgelabz.fundooNotes.util.JwtGenerator;
 
 /**
  * This class loads note details from database
+ * 
  * @author Sunidhi Haldar
  * @created 2020-01-25
  * @version 1.8
@@ -40,13 +41,11 @@ public class NoteServiceImpl implements INoteService {
 	@Autowired
 	private JwtGenerator generate;
 
-	NoteInfo noteInfo = new NoteInfo();
-
 	@Override
-	@Transactional
 	public boolean createNote(NoteDto note, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
+		NoteInfo noteInfo = new NoteInfo();
 		if (user != null && user.isVerified()) {
 			BeanUtils.copyProperties(note, noteInfo);
 			noteInfo.setCreatedAt(LocalDateTime.now());
@@ -123,7 +122,7 @@ public class NoteServiceImpl implements INoteService {
 
 	@Transactional
 	@Override
-	public boolean pinNote(long noteId, String token) {
+	public boolean isPinnedNote(long noteId, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
@@ -135,7 +134,10 @@ public class NoteServiceImpl implements INoteService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new NoteException("note already pinned");
+				note.setPinned(false);
+				note.setUpdatedAt(LocalDateTime.now());
+				noteRepository.save(note);
+				return false;
 			}
 			throw new NoteException("Note not found");
 		}

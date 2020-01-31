@@ -61,10 +61,10 @@ public class NoteController {
 	}
 
 	@PostMapping("pin/{noteId}")
-	public ResponseEntity<Response> pinNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
-		boolean result = noteService.pinNote(noteId, token);
+	public ResponseEntity<Response> pinOrUnpinNote(@PathVariable("noteId") long noteId, @RequestHeader String token) {
+		boolean result = noteService.isPinnedNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note pinned", 200))
-				: ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("Error, check your noteId", 502));
+				: ResponseEntity.status(HttpStatus.OK).body(new Response("Note unpinned", 200));
 	}
 
 	@PostMapping("trash/{noteId}")

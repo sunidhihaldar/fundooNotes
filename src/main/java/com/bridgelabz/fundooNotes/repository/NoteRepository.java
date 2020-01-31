@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 
 /**
- * This class provides repository functionalities like saving a note, find a note by its id and deleting a note
+ * This class provides repository functionalities like saving a note, find a
+ * note by its id and deleting a note
+ * 
  * @author Sunidhi Haldar
  * @created 2020-01-24
  * @version 1.8
@@ -26,6 +28,7 @@ public class NoteRepository {
 	@Autowired
 	private EntityManager entityManager;
 
+	@Transactional
 	public NoteInfo save(NoteInfo note) {
 		Session session = entityManager.unwrap(Session.class);
 		session.saveOrUpdate(note);
