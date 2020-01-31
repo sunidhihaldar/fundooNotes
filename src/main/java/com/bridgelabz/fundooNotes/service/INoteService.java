@@ -34,4 +34,6 @@ public interface INoteService {
 	public boolean setReminderNote(long noteId, String token, ReminderDto reminder);
 	
 	public boolean removeReminderNote(long noteId, String token);
+	
+	public List<NoteInfo> searchByTitle(String token, String title);
 }

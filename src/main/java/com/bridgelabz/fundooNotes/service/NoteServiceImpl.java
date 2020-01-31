@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.fundooNotes.customException.NoteNotFoundException;
+import com.bridgelabz.fundooNotes.customException.NoteException;
 import com.bridgelabz.fundooNotes.customException.UserNotFoundException;
 import com.bridgelabz.fundooNotes.customException.UserNotVerifiedException;
 import com.bridgelabz.fundooNotes.dto.NoteDto;
@@ -73,7 +73,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotVerifiedException("Please verify");
 	}
@@ -88,7 +88,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.deleteNote(noteId);
 				return true;
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
@@ -107,9 +107,9 @@ public class NoteServiceImpl implements INoteService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new NoteNotFoundException("note already archived");
+				throw new NoteException("note already archived");
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
@@ -128,9 +128,9 @@ public class NoteServiceImpl implements INoteService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new NoteNotFoundException("note already pinned");
+				throw new NoteException("note already pinned");
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
@@ -151,7 +151,7 @@ public class NoteServiceImpl implements INoteService {
 				}
 				return false;
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
@@ -174,9 +174,9 @@ public class NoteServiceImpl implements INoteService {
 	public List<NoteInfo> getAllPinnedNotes(String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if( user != null) {
+		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllPinnedNotes(user.getUserId());
-			if(!fetchedNotes.isEmpty()) {
+			if (!fetchedNotes.isEmpty()) {
 				return fetchedNotes;
 			}
 			return fetchedNotes;
@@ -188,9 +188,9 @@ public class NoteServiceImpl implements INoteService {
 	public List<NoteInfo> getAllTrashedNotes(String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllTrashedNotes(user.getUserId());
-			if(!fetchedNotes.isEmpty()) {
+			if (!fetchedNotes.isEmpty()) {
 				return fetchedNotes;
 			}
 			return fetchedNotes;
@@ -202,9 +202,9 @@ public class NoteServiceImpl implements INoteService {
 	public List<NoteInfo> getAllArchivedNotes(String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllArchivedNotes(user.getUserId());
-			if(!fetchedNotes.isEmpty()) {
+			if (!fetchedNotes.isEmpty()) {
 				return fetchedNotes;
 			}
 			return fetchedNotes;
@@ -217,15 +217,15 @@ public class NoteServiceImpl implements INoteService {
 	public boolean updateColour(long noteId, String token, String colour) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
-			if(note != null) {
+			if (note != null) {
 				note.setColour(colour);
 				note.setUpdatedAt(LocalDateTime.now());
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
@@ -235,15 +235,15 @@ public class NoteServiceImpl implements INoteService {
 	public boolean setReminderNote(long noteId, String token, ReminderDto reminderDto) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
-			if(note != null) {
+			if (note != null) {
 				note.setReminder(reminderDto.getTime());
 				note.setUpdatedAt(LocalDateTime.now());
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
@@ -253,18 +253,32 @@ public class NoteServiceImpl implements INoteService {
 	public boolean removeReminderNote(long noteId, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
-			if(note != null) {
-				if(note.getReminder() != null) {
+			if (note != null) {
+				if (note.getReminder() != null) {
 					note.setReminder(null);
 					note.setUpdatedAt(LocalDateTime.now());
 					noteRepository.save(note);
 					return true;
 				}
-				throw new NoteNotFoundException("Not already set null");
+				throw new NoteException("Not already set null");
 			}
-			throw new NoteNotFoundException("Note not found");
+			throw new NoteException("Note not found");
+		}
+		throw new UserNotFoundException("User not found");
+	}
+
+	@Override
+	public List<NoteInfo> searchByTitle(String token, String title) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if (user != null) {
+			List<NoteInfo> fetchedNotes = noteRepository.getAllNotes(title);
+			if (!fetchedNotes.isEmpty()) {
+				return fetchedNotes;
+			}
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}

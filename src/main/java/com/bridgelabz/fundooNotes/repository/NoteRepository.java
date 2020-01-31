@@ -73,4 +73,9 @@ public class NoteRepository {
 		return session.createQuery("FROM NoteInfo where user_id=:userId and is_archived=true")
 				.setParameter("userId", userId).getResultList();
 	}
+
+	public List<NoteInfo> getAllNotes(String title) {
+		return entityManager.unwrap(Session.class).createQuery("FROM NoteInfo where title=:title and is_trashed=false")
+				.setParameter("title", title).getResultList();
+	}
 }

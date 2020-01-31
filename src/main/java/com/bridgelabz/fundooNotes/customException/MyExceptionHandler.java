@@ -11,14 +11,14 @@ import com.bridgelabz.fundooNotes.response.Response;
 @RestControllerAdvice
 public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler({UserNotVerifiedException.class, UserNotFoundException.class})
+	@ExceptionHandler({ UserNotVerifiedException.class, UserNotFoundException.class })
 	public ResponseEntity<Response> userNotVerified(Exception ex) {
-		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response(ex.getMessage(), 502));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(ex.getMessage(), 400));
 	}
-	
-	@ExceptionHandler(NoteNotFoundException.class)
-	public ResponseEntity<Response> noteNotFound(Exception ex) {
-		Response response = new Response(ex.getMessage(), 400);
-		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+	@ExceptionHandler(NoteException.class)
+	public ResponseEntity<Response> noteNotFound(NoteException ex) {
+		Response response = new Response(ex.getMessage(), 502);
+		return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
 	}
 }

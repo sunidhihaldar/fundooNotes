@@ -119,17 +119,24 @@ public class NoteController {
 	}
 
 	@PutMapping("setReminder/{noteId}")
-	public ResponseEntity<Response> setReminder(@PathVariable long noteId, @RequestHeader("token") String token,
-			@RequestBody ReminderDto reminderDto) {
+	public ResponseEntity<Response> setReminder(@PathVariable("noteId") long noteId,
+			@RequestHeader("token") String token, @RequestBody ReminderDto reminderDto) {
 		boolean result = noteService.setReminderNote(noteId, token, reminderDto);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder set", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Reminder not set", 404));
 	}
-	
+
 	@PutMapping("removeReminder/{noteId}")
-	public ResponseEntity<Response> removeReminderNote(@PathVariable long noteId, @RequestHeader("token") String token) {
+	public ResponseEntity<Response> removeReminderNote(@PathVariable("noteID") long noteId,
+			@RequestHeader("token") String token) {
 		boolean result = noteService.removeReminderNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder removed", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error removing reminder", 404));
+	}
+
+	@GetMapping("search")
+	public ResponseEntity<Response> searchByTitle(@RequestHeader("token") String token, @RequestParam String title) {
+		List<NoteInfo> list = noteService.searchByTitle(token, title);
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("Notes are", 200, list));
 	}
 }
