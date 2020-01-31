@@ -21,6 +21,7 @@ import com.bridgelabz.fundooNotes.util.Utility;
 
 /**
  * This class loads user details from a database
+ * 
  * @author Sunidhi Haldar
  * @created 2020-01-17
  * @version 1.8
@@ -54,7 +55,7 @@ public class UserServiceImpl implements IUserService {
 		userRepository.save(user);
 		String response = MailResponse.formMessage("http://localhost:8081/user/verification",
 				generate.createJwtToken(user.getUserId()));
-		mailServiceProvider.sendEmail(user.getEmail(), "Registration  verification", response);
+		mailServiceProvider.sendEmail(user.getEmail(), "Registration verification", response);
 		return true;
 	}
 
@@ -79,7 +80,7 @@ public class UserServiceImpl implements IUserService {
 				// else sends a link
 				String response = MailResponse.formMessage("http://localhost:8081/user/verification",
 						generate.createJwtToken(user.getUserId()));
-				mailServiceProvider.sendEmail(user.getEmail(), "Registration  verification", response);
+				mailServiceProvider.sendEmail(user.getEmail(), "Registration verification", response);
 				return null;
 			}
 			throw new UserNotVerifiedException("Invalid credentials");
