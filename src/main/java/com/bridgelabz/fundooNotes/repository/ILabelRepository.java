@@ -10,7 +10,7 @@ public interface ILabelRepository {
 
 	public LabelInfo fetchLabel(long userId, String labelName);
 
-	public LabelInfo getLabelByUserId(long userId);
+	public LabelInfo getLabelById(long labelId);
 
 	public boolean deleteLabel(long labelId);
 

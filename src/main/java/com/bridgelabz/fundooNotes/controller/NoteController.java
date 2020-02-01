@@ -111,7 +111,7 @@ public class NoteController {
 	}
 
 	@PutMapping("updateColour/{noteId}")
-	public ResponseEntity<Response> updateColour(@PathVariable long noteId, @RequestHeader("token") String token,
+	public ResponseEntity<Response> updateColour(@PathVariable("noteId") long noteId, @RequestHeader("token") String token,
 			@RequestParam String colour) {
 		boolean result = noteService.updateColour(noteId, token, colour);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Colour updated", 200))
@@ -127,7 +127,7 @@ public class NoteController {
 	}
 
 	@PutMapping("removeReminder/{noteId}")
-	public ResponseEntity<Response> removeReminderNote(@PathVariable("noteID") long noteId,
+	public ResponseEntity<Response> removeReminderNote(@PathVariable("noteId") long noteId,
 			@RequestHeader("token") String token) {
 		boolean result = noteService.removeReminderNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Reminder removed", 200))

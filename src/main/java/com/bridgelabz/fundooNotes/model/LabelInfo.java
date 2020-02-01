@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -17,18 +18,20 @@ import javax.persistence.Table;
 public class LabelInfo {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "label_id")
 	private long labelId;
 
 	private String labelName;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+	@JoinTable(name = "label_note", joinColumns = { @JoinColumn(name = "label_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "note_id") })
+	// @JoinColumn(name = "user_id")
 	private List<NoteInfo> note;
 
 	// @JoinColumn(name = "")
-	private long userId;
+	//private long userId;
 
 	public long getLabelId() {
 		return labelId;
@@ -54,11 +57,11 @@ public class LabelInfo {
 		this.note = note;
 	}
 
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
+//	public long getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(long userId) {
+//		this.userId = userId;
+//	}
 }

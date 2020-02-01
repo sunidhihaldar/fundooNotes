@@ -52,6 +52,10 @@ public class UserEntity {
 	@JoinColumn(name = "user_id")
 	private List<NoteInfo> note;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
+	private List<LabelInfo> labelList;
+
 	public UserEntity(long userId, String firstName, String lastName, String email, long mobileNumber,
 			String password) {
 		super();
@@ -135,5 +139,13 @@ public class UserEntity {
 
 	public void setNote(List<NoteInfo> note) {
 		this.note = note;
+	}
+
+	public List<LabelInfo> getLabelList() {
+		return labelList;
+	}
+
+	public void setLabelList(List<LabelInfo> labelList) {
+		this.labelList = labelList;
 	}
 }
