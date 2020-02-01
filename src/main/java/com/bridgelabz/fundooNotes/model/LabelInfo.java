@@ -28,7 +28,7 @@ public class LabelInfo {
 	private List<NoteInfo> note;
 
 	// @JoinColumn(name = "")
-	private UserEntity userId;
+	private long userId;
 
 	public long getLabelId() {
 		return labelId;
@@ -54,11 +54,11 @@ public class LabelInfo {
 		this.note = note;
 	}
 
-	public UserEntity getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(UserEntity userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 }
