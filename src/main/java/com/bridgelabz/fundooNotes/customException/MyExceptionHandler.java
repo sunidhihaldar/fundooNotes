@@ -24,7 +24,13 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(NoteException.class)
-	public ResponseEntity<Response> noteNotFound(NoteException ex) {
+	public ResponseEntity<Response> noteException(NoteException ex) {
+		Response response = new Response(ex.getMessage(), 502);
+		return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+	}
+	
+	@ExceptionHandler(LabelException.class)
+	public ResponseEntity<Response> labelException(LabelException ex) {
 		Response response = new Response(ex.getMessage(), 502);
 		return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
 	}
