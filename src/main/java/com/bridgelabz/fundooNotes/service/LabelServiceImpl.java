@@ -4,6 +4,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundooNotes.customException.LabelException;
+import com.bridgelabz.fundooNotes.customException.UserNotFoundException;
 import com.bridgelabz.fundooNotes.dto.LabelDto;
 import com.bridgelabz.fundooNotes.model.LabelInfo;
 import com.bridgelabz.fundooNotes.model.UserEntity;
@@ -34,7 +36,7 @@ public class LabelServiceImpl implements ILabelService {
 			labelRepository.save(label);
 			return true;
 		}
-		return false;
+		throw new UserNotFoundException("User not found");
 	}
 
 }
