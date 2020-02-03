@@ -81,13 +81,17 @@ public class LabelServiceImpl implements ILabelService {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
-			LabelInfo label = labelRepository.getLabelById(labelId);
-			if (label != null) {
-				NoteInfo note = noteRepository.findById(noteId);
-				note.getLabelList().remove(label);
-				noteRepository.save(note);
+			NoteInfo note = noteRepository.findById(noteId);
+			if(note != null) {
+				LabelInfo label = labelRepository.getLabelById(labelId);
+				if (label != null) {
+					note.getLabelList().remove(label);
+					noteRepository.save(note);
+					return true;
+				}
+				throw new LabelException("Label doesn't exist");
 			}
-			throw new LabelException("Label doesn't exist");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}

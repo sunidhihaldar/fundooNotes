@@ -27,11 +27,6 @@ public class JwtGenerator {
 		Long userId = (long) 0;
 		try {
 			if (jwtToken != null) {
-//				Verification verification = JWT.require(Algorithm.HMAC256(TOKEN_SECRET_CODE));
-//				JWTVerifier jwtverifier = verification.build();
-//				DecodedJWT decodedjwt = jwtverifier.verify(jwtToken);
-//				Claim claim = decodedjwt.getClaim("id");
-				//userId = claim.asLong();
 				userId = JWT.require(Algorithm.HMAC256(SECRET)).build().verify(jwtToken).getClaim("id").asLong();
 			}
 		} catch (IllegalArgumentException | JWTCreationException e) {

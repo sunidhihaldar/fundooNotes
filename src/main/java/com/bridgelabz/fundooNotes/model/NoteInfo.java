@@ -14,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * This model class acts as a note entity and the parameters gets stored in the
  * database
@@ -53,7 +55,7 @@ public class NoteInfo {
 
 	private LocalDateTime reminder;
 
-	// @ManyToMany(mappedBy = "noteList")
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "note_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "label_id") })
