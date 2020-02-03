@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundooNotes.dto.LabelDto;
@@ -24,14 +25,23 @@ public class LabelController {
 	@PostMapping("create")
 	public ResponseEntity<Response> createLabel(@RequestBody LabelDto labelDto, @RequestHeader("token") String token) {
 		boolean result = labelService.createLabel(labelDto, token);
-		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label created", 200))
+		return (result) ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("Label created", 201))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error...label not created", 404));
 	}
-	
+
 	@PostMapping("createAndMap/{noteId}")
-	public ResponseEntity<Response> createAndMapLabel(@RequestBody LabelDto labelDto, @RequestHeader("token") String token, @PathVariable("noteId") long noteId) {
+	public ResponseEntity<Response> createAndMapLabel(@RequestBody LabelDto labelDto,
+			@RequestHeader("token") String token, @PathVariable("noteId") long noteId) {
 		boolean result = labelService.createAndMapLabel(labelDto, token, noteId);
-		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label mapped", 200))
+		return (result) ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("Label mapped", 201))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error...", 404));
+	}
+
+	@PostMapping("removeLabel")
+	public ResponseEntity<Response> removeLabel(@RequestParam("labelId") long labelId,
+			@RequestParam("noteId") long noteId, @RequestHeader("token") String token) {
+		boolean result = labelService.removeLabel(labelId, noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label removed", 200))
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....label not removed", 404));
 	}
 }

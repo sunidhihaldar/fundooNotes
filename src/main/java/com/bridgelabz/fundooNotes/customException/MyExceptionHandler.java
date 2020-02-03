@@ -25,8 +25,8 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NoteException.class)
 	public ResponseEntity<Response> noteException(NoteException ex) {
-		Response response = new Response(ex.getMessage(), 502);
-		return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+		Response response = new Response(ex.getMessage(), 400);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(LabelException.class)

@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import com.bridgelabz.fundooNotes.model.LabelInfo;
 
 @Repository
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class LabelRepository implements ILabelRepository {
 
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Override
 	public LabelInfo save(LabelInfo label) {
 		Session session = entityManager.unwrap(Session.class);
@@ -48,7 +48,7 @@ public class LabelRepository implements ILabelRepository {
 		Query query = session.createQuery("delete from LabelInfo where labelId=:labelId");
 		query.setParameter("labelId", labelId);
 		int affectedRows = query.executeUpdate();
-		if(affectedRows > 0)
+		if (affectedRows > 0)
 			return true;
 		return false;
 	}
@@ -67,5 +67,14 @@ public class LabelRepository implements ILabelRepository {
 		Query query = session.createQuery("FROM LabelInfo where labelId=:labelId");
 		query.setParameter("labelId", labelId);
 		return (LabelInfo) query.uniqueResult();
+	}
+
+	@Override
+	public LabelInfo getLabel(String labelName) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("FROM LabelInfo WHERE labelName=:labelName");
+		query.setParameter("labelName", labelName);
+		return (LabelInfo) query.uniqueResult();
+
 	}
 }

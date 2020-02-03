@@ -1,16 +1,23 @@
 package com.bridgelabz.fundooNotes.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
- * This model class acts as a note entity and the parameters gets stored in the database
+ * This model class acts as a note entity and the parameters gets stored in the
+ * database
+ * 
  * @author Sunidhi Haldar
  * @created 2020-01-24
  * @version 1.8
@@ -45,6 +52,12 @@ public class NoteInfo {
 	private String colour;
 
 	private LocalDateTime reminder;
+
+	// @ManyToMany(mappedBy = "noteList")
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "note_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "label_id") })
+	private List<LabelInfo> labelList;
 
 	public long getNoteId() {
 		return noteId;
@@ -131,6 +144,14 @@ public class NoteInfo {
 		return "NoteInfo [noteId=" + noteId + ", title=" + title + ", description=" + description + ", isPinned="
 				+ isPinned + ", isArchived=" + isArchived + ", isTrashed=" + isTrashed + ", createdAt=" + createdAt
 				+ ", updatedAt=" + updatedAt + ", colour=" + colour + ", reminder=" + reminder + "]";
+	}
+
+	public List<LabelInfo> getLabelList() {
+		return labelList;
+	}
+
+	public void setLabelList(List<LabelInfo> labelList) {
+		this.labelList = labelList;
 	}
 
 }

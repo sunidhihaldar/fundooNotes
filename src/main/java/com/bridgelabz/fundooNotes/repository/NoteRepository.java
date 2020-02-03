@@ -34,7 +34,7 @@ public class NoteRepository {
 		session.saveOrUpdate(note);
 		return note;
 	}
-
+	
 	public NoteInfo findById(long noteId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query idQuery = session.createQuery("FROM NoteInfo where noteId=:noteId");

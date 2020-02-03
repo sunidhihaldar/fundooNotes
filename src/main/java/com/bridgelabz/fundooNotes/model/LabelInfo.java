@@ -24,14 +24,11 @@ public class LabelInfo {
 
 	private String labelName;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "label_note", joinColumns = { @JoinColumn(name = "label_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "note_id") })
-	// @JoinColumn(name = "user_id")
-	private List<NoteInfo> note;
-
-	// @JoinColumn(name = "")
-	//private long userId;
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "label_id") }, inverseJoinColumns = {
+//			@JoinColumn(name = "note_id") })
+	@ManyToMany(mappedBy = "labelList")
+	private List<NoteInfo> noteList;
 
 	public long getLabelId() {
 		return labelId;
@@ -49,19 +46,11 @@ public class LabelInfo {
 		this.labelName = labelName;
 	}
 
-	public List<NoteInfo> getNote() {
-		return note;
+	public List<NoteInfo> getNoteList() {
+		return noteList;
 	}
 
-	public void setNote(List<NoteInfo> note) {
-		this.note = note;
+	public void setNoteList(List<NoteInfo> noteList) {
+		this.noteList = noteList;
 	}
-
-//	public long getUserId() {
-//		return userId;
-//	}
-//
-//	public void setUserId(long userId) {
-//		this.userId = userId;
-//	}
 }

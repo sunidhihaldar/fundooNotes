@@ -1,7 +1,5 @@
 package com.bridgelabz.fundooNotes.service;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -25,26 +23,27 @@ public class LabelServiceImpl implements ILabelService {
 
 	@Autowired
 	private ILabelRepository labelRepository;
-	
+
 	@Autowired
 	private IUserRepository userRepository;
-	
+
+	@Autowired
 	private NoteRepository noteRepository;
-	
+
 	@Autowired
 	private JwtGenerator generate;
-	
+
 	@Transactional
 	@Override
 	public boolean createLabel(LabelDto labelDto, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
 		LabelInfo labelInfo = new LabelInfo();
-		if(user != null && user.isVerified()) {
+		if (user != null) {
 			LabelInfo label = labelRepository.fetchLabel(user.getUserId(), labelDto.getLabelName());
-			if(label == null) {
+			if (label == null) {
 				BeanUtils.copyProperties(labelDto, labelInfo);
-				user.getLabelList().add(labelInfo);
+				user.getLabels().add(labelInfo);
 				labelRepository.save(labelInfo);
 				return true;
 			}
@@ -56,38 +55,40 @@ public class LabelServiceImpl implements ILabelService {
 	@Transactional
 	@Override
 	public boolean createAndMapLabel(LabelDto labelDto, String token, long noteId) {
-		long userId = generate.parseJWT(token);
-		UserEntity user = userRepository.getUser(userId);
-		LabelInfo labelInfo = new LabelInfo();
-		if(user != null && user.isVerified()) {
-			LabelInfo label = labelRepository.fetchLabel(user.getUserId(), labelDto.getLabelName());
-			if(label == null) {
-				BeanUtils.copyProperties(labelDto, labelInfo);
-				NoteInfo note = noteRepository.findById(noteId);
-				user.getLabelList().add(labelInfo);
-				labelRepository.save(labelInfo);
-				user.getNote().add(note);
-				labelRepository.save(labelInfo);
-				return true;
+		UserEntity fetchedUser = userRepository.getUser(generate.parseJWT(token));
+		if (fetchedUser != null) {
+			NoteInfo fetchedNote = noteRepository.findById(noteId);
+			if (fetchedNote != null) {
+				LabelInfo fetchedLabel = labelRepository.fetchLabel(fetchedUser.getUserId(), labelDto.getLabelName());
+				if (fetchedLabel == null) {
+					LabelInfo newLabel = new LabelInfo();
+					BeanUtils.copyProperties(labelDto, newLabel);
+					fetchedUser.getLabels().add(newLabel);
+					fetchedNote.getLabelList().add(newLabel);
+					labelRepository.save(newLabel);
+					return true;
+				}
+				throw new LabelException("Label already exists");
 			}
-			throw new LabelException("Label already exists");
+			throw new NoteException("Note not found");
 		}
 		throw new UserNotFoundException("User not found");
 	}
 
-	//@SuppressWarnings("unlikely-arg-type")
+	@Transactional
 	@Override
 	public boolean removeLabel(long labelId, long noteId, String token) {
-		NoteInfo note = noteRepository.findById(noteId);
-		if(note != null) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if (user != null) {
 			LabelInfo label = labelRepository.getLabelById(labelId);
-			if(label != null) {
-				label.getNote().remove(label);
+			if (label != null) {
+				NoteInfo note = noteRepository.findById(noteId);
+				note.getLabelList().remove(label);
 				noteRepository.save(note);
-				return true;
 			}
-			throw new LabelException("Label does not exist");
+			throw new LabelException("Label doesn't exist");
 		}
-		throw new NoteException("Note not found");
+		throw new UserNotFoundException("User not found");
 	}
 }

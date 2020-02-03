@@ -54,7 +54,7 @@ public class UserEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
-	private List<LabelInfo> labelList;
+	private List<LabelInfo> labels;
 
 	public UserEntity(long userId, String firstName, String lastName, String email, long mobileNumber,
 			String password) {
@@ -141,11 +141,11 @@ public class UserEntity {
 		this.note = note;
 	}
 
-	public List<LabelInfo> getLabelList() {
-		return labelList;
+	public List<LabelInfo> getLabels() {
+		return labels;
 	}
 
-	public void setLabelList(List<LabelInfo> labelList) {
-		this.labelList = labelList;
+	public void setLabels(List<LabelInfo> labels) {
+		this.labels = labels;
 	}
 }

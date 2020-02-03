@@ -17,4 +17,6 @@ public interface ILabelRepository {
 	public List<LabelInfo> getAllLabels(long userId);
 
 	public LabelInfo getLabel(long labelId);
+
+	public LabelInfo getLabel(String labelName);
 }
