@@ -34,7 +34,7 @@ public class LabelServiceImpl implements ILabelService {
 
 	@Autowired
 	private JwtGenerator generate;
-	
+
 	static final String USER_STATUS = "User not found";
 	static final String NOTE_STATUS = "Note not found";
 	static final String LABEL_STATUS = "Label doesn't exist";
@@ -88,7 +88,7 @@ public class LabelServiceImpl implements ILabelService {
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
-			if(note != null) {
+			if (note != null) {
 				LabelInfo label = labelRepository.findById(labelId);
 				if (label != null) {
 					note.getLabelList().remove(label);
@@ -107,11 +107,11 @@ public class LabelServiceImpl implements ILabelService {
 	public boolean addLabel(long labelId, long noteId, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
-			if(note != null) {
+			if (note != null) {
 				LabelInfo label = labelRepository.findById(labelId);
-				if(label != null) {
+				if (label != null) {
 					note.getLabelList().add(label);
 					labelRepository.save(label);
 					return true;
@@ -128,9 +128,9 @@ public class LabelServiceImpl implements ILabelService {
 	public boolean editLabel(long labelId, String token, LabelDto labelDto) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			LabelInfo label = labelRepository.findById(labelId);
-			if(label != null) {
+			if (label != null) {
 				label.setLabelName(labelDto.getLabelName());
 				labelRepository.save(label);
 				return true;
@@ -145,9 +145,9 @@ public class LabelServiceImpl implements ILabelService {
 	public boolean deletePermanentlyLabel(long labelId, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			LabelInfo label = labelRepository.findById(labelId);
-			if(label != null) {
+			if (label != null) {
 				labelRepository.deleteLabel(labelId);
 				labelRepository.save(label);
 				return true;
@@ -162,9 +162,9 @@ public class LabelServiceImpl implements ILabelService {
 	public List<LabelInfo> getLabels(String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
-			List<LabelInfo> fetchedLabels = labelRepository.getAllLabels(user.getUserId());
-			if(!fetchedLabels.isEmpty()) {
+		if (user != null) {
+			List<LabelInfo> fetchedLabels = labelRepository.getAllLabels(userId);
+			if (!fetchedLabels.isEmpty()) {
 				return fetchedLabels;
 			}
 			return fetchedLabels;
@@ -176,13 +176,13 @@ public class LabelServiceImpl implements ILabelService {
 	public List<NoteInfo> getNotes(long labelId, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
-		if(user != null) {
+		if (user != null) {
 			LabelInfo label = labelRepository.findById(labelId);
-			if(label != null) {
+			if (label != null) {
 				return label.getNoteList();
 			}
 			throw new LabelException(LABEL_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
-} 
+}

@@ -3,7 +3,6 @@ package com.bridgelabz.fundooNotes.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +21,10 @@ import com.bridgelabz.fundooNotes.response.UserAuthenticationResponse;
 import com.bridgelabz.fundooNotes.service.IUserService;
 import com.bridgelabz.fundooNotes.util.JwtGenerator;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("user")
 //@CrossOrigin(origins = "http://localhost:8081")
@@ -34,6 +37,9 @@ public class UserController {
 	private JwtGenerator generate;
 
 	@PostMapping("registration")
+	@ApiOperation(value = "Api to register user", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "registration successfull"),
+			@ApiResponse(code = 400, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> registration(@RequestBody UserDto userDto) {
 		boolean result = service.registration(userDto);
 		if (!result)

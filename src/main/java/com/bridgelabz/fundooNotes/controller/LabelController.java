@@ -22,6 +22,10 @@ import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.ILabelService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("label")
 public class LabelController {
@@ -30,6 +34,9 @@ public class LabelController {
 	private ILabelService labelService;
 
 	@PostMapping("create")
+	@ApiOperation(value = "Api to create label", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Label created "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> createLabel(@RequestBody LabelDto labelDto, @RequestHeader("token") String token) {
 		boolean result = labelService.createLabel(labelDto, token);
 		return (result) ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("Label created", 201))
@@ -37,6 +44,9 @@ public class LabelController {
 	}
 
 	@PostMapping("createAndMap/{noteId}")
+	@ApiOperation(value = "Api to create label and map it", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Label mappped "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> createAndMapLabel(@RequestBody LabelDto labelDto,
 			@RequestHeader("token") String token, @PathVariable("noteId") long noteId) {
 		boolean result = labelService.createAndMapLabel(labelDto, token, noteId);
@@ -45,6 +55,9 @@ public class LabelController {
 	}
 
 	@DeleteMapping("removeLabel")
+	@ApiOperation(value = "Api to remove label", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Label removed "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> removeLabel(@RequestParam("labelId") long labelId,
 			@RequestParam("noteId") long noteId, @RequestHeader("token") String token) {
 		boolean result = labelService.removeLabel(labelId, noteId, token);
@@ -53,6 +66,9 @@ public class LabelController {
 	}
 
 	@PostMapping("addLabel")
+	@ApiOperation(value = "Api to add label", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Label added "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> addLabel(@RequestParam("labelId") long labelId, @RequestParam("noteId") long noteId,
 			@RequestHeader("token") String token) {
 		boolean result = labelService.addLabel(labelId, noteId, token);
@@ -61,6 +77,9 @@ public class LabelController {
 	}
 
 	@PutMapping("editLabel")
+	@ApiOperation(value = "Api to edit label", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Label edited "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> editLabel(@RequestParam("labelId") long labelId,
 			@RequestHeader("token") String token, @RequestBody LabelDto labelDto) {
 		boolean result = labelService.editLabel(labelId, token, labelDto);
@@ -69,6 +88,9 @@ public class LabelController {
 	}
 
 	@DeleteMapping("deleteLabel")
+	@ApiOperation(value = "Api to delete label", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Label deleted "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> deleteLabel(@RequestParam("labelId") long labelId,
 			@RequestHeader("token") String token) {
 		boolean result = labelService.deletePermanentlyLabel(labelId, token);
@@ -77,6 +99,9 @@ public class LabelController {
 	}
 
 	@GetMapping("getAllLabels")
+	@ApiOperation(value = "Api to get all labels of a user", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "All labels are "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> getAllLabels(@RequestHeader("token") String token) {
 		List<LabelInfo> list = labelService.getLabels(token);
 		if (!list.isEmpty()) {
@@ -86,11 +111,14 @@ public class LabelController {
 	}
 
 	@GetMapping("getAllNotes")
-	public ResponseEntity<Response> getAllNotes(@RequestParam("token") long labelId,
+	@ApiOperation(value = "Api to get all notes of a label", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "All notes of this label are "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
+	public ResponseEntity<Response> getAllNotes(@RequestParam("labelId") long labelId,
 			@RequestHeader("token") String token) {
 		List<NoteInfo> list = labelService.getNotes(labelId, token);
 		if (!list.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes for this label are ", 200));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes for this label are ", 200, list));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}

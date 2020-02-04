@@ -41,6 +41,9 @@ public class NoteServiceImpl implements INoteService {
 	@Autowired
 	private JwtGenerator generate;
 
+	static final String USER_STATUS = "User not found";
+	static final String NOTE_STATUS = "Note not found";
+	
 	@Override
 	public boolean createNote(NoteDto note, String token) {
 		long userId = generate.parseJWT(token);
@@ -79,7 +82,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
 		throw new UserNotVerifiedException("Please verify");
 	}
@@ -94,9 +97,9 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.deleteNote(noteId);
 				return true;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -115,9 +118,9 @@ public class NoteServiceImpl implements INoteService {
 				}
 				throw new NoteException("note already archived");
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -139,9 +142,9 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return false;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -160,9 +163,9 @@ public class NoteServiceImpl implements INoteService {
 				}
 				return false;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
@@ -176,7 +179,7 @@ public class NoteServiceImpl implements INoteService {
 			}
 			return fetchedNotes;
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
@@ -190,7 +193,7 @@ public class NoteServiceImpl implements INoteService {
 			}
 			return fetchedNotes;
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
@@ -204,7 +207,7 @@ public class NoteServiceImpl implements INoteService {
 			}
 			return fetchedNotes;
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
@@ -218,7 +221,7 @@ public class NoteServiceImpl implements INoteService {
 			}
 			return fetchedNotes;
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -234,9 +237,9 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -252,9 +255,9 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -273,9 +276,9 @@ public class NoteServiceImpl implements INoteService {
 				}
 				throw new NoteException("Not already set null");
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
@@ -287,8 +290,8 @@ public class NoteServiceImpl implements INoteService {
 			if (!fetchedNotes.isEmpty()) {
 				return fetchedNotes;
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 }

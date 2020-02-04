@@ -34,14 +34,14 @@ public class NoteController {
 	public ResponseEntity<Response> createNote(@RequestBody NoteDto note, @RequestHeader String token) {
 		boolean result = noteService.createNote(note, token);
 		return (result) ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("note created", 200, note))
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 404, note));
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error.....please check your noteId", 404, note));
 	}
 
 	@PutMapping("updateNote")
 	public ResponseEntity<Response> updateNote(@RequestBody NoteUpdation update, @RequestHeader("token") String token) {
 		boolean result = noteService.updateNote(update, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note updated", 200))
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 400));
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....check your noteId", 400));
 	}
 
 	@DeleteMapping("delete/{noteId}")
@@ -49,7 +49,7 @@ public class NoteController {
 			@RequestHeader("token") String token) {
 		boolean result = noteService.deleteNote(noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Note deleted", 200))
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error, check your noteId", 404));
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....please check your noteId!", 404));
 	}
 
 	@PostMapping("archive/{noteId}")
@@ -89,7 +89,7 @@ public class NoteController {
 		if (!list.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("All pinned notes are", 200, list));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list...", 404));
 	}
 
 	@GetMapping("getAllNotes/trashed")

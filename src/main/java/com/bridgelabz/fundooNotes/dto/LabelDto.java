@@ -5,6 +5,13 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * This class label DTO takes data from the user
+ * @author Sunidhi Haldar
+ * @created 2020-02-01
+ * @version 1.8
+ */
+
 @Component
 public class LabelDto {
 

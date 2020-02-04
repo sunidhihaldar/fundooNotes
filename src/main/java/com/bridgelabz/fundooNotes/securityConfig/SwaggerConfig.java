@@ -16,11 +16,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
 	@Bean
-    public Docket api() { 
-        return new Docket(DocumentationType.SWAGGER_2)  
-          .select()                                  
-          .apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundooNotes.controller")).paths(regex("/.*"))                          
-          .build();
-          //.apiInfo(new ApiInfo("Fundoo Notes App", "Contains Apis for registerting, logging in and creating notes and labels", "1.0", "http://www.apache.org/licenses/LICENSE-2.0", new Contact("fundoo app", "vv", "jk"), "hn", "fbg", null));
-    }
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundooNotes.controller")).paths(regex("/.*"))
+				.build();
+//				.apiInfo(new ApiInfo("Fundoo Notes App",
+//						"Contains Apis for registerting, logging in and creating notes and labels", "1.0",
+//						"http://www.apache.org/licenses/LICENSE-2.0",
+//						new Contact("fundoo app", "mail", "sunidhihaldar@gmail.com"), "Apache-2.0",
+//						"http://www.apache.org/licenses/LICENSE-2.0", null));
+	}
 }

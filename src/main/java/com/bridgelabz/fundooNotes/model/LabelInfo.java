@@ -10,6 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+/**
+ * This class acts as a label entity and the parameters gets stored in the database
+ * @author Sunidhi Haldar
+ * @created 2020-02-01
+ * @version 1.8
+ */
+
 @Entity
 @Table(name = "label")
 public class LabelInfo {
