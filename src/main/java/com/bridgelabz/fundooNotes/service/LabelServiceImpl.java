@@ -1,5 +1,7 @@
 package com.bridgelabz.fundooNotes.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -32,6 +34,10 @@ public class LabelServiceImpl implements ILabelService {
 
 	@Autowired
 	private JwtGenerator generate;
+	
+	static final String USER_STATUS = "User not found";
+	static final String NOTE_STATUS = "Note not found";
+	static final String LABEL_STATUS = "Label doesn't exist";
 
 	@Transactional
 	@Override
@@ -49,7 +55,7 @@ public class LabelServiceImpl implements ILabelService {
 			}
 			throw new LabelException("Label already exists");
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -70,9 +76,9 @@ public class LabelServiceImpl implements ILabelService {
 				}
 				throw new LabelException("Label already exists");
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -89,11 +95,11 @@ public class LabelServiceImpl implements ILabelService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new LabelException("Label doesn't exist");
+				throw new LabelException(LABEL_STATUS);
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
@@ -110,10 +116,59 @@ public class LabelServiceImpl implements ILabelService {
 					labelRepository.save(label);
 					return true;
 				}
-				throw new LabelException("Label doesn't exist");
+				throw new LabelException(LABEL_STATUS);
 			}
-			throw new NoteException("Note not found");
+			throw new NoteException(NOTE_STATUS);
 		}
-		throw new UserNotFoundException("User not found");
+		throw new UserNotFoundException(USER_STATUS);
+	}
+
+	@Transactional
+	@Override
+	public boolean editLabel(long labelId, String token, LabelDto labelDto) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			LabelInfo label = labelRepository.findById(labelId);
+			if(label != null) {
+				label.setLabelName(labelDto.getLabelName());
+				labelRepository.save(label);
+				return true;
+			}
+			throw new LabelException(LABEL_STATUS);
+		}
+		throw new UserNotFoundException(USER_STATUS);
+	}
+
+	@Transactional
+	@Override
+	public boolean deletePermanentlyLabel(long labelId, String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			LabelInfo label = labelRepository.findById(labelId);
+			if(label != null) {
+				labelRepository.deleteLabel(labelId);
+				labelRepository.save(label);
+				return true;
+			}
+			throw new LabelException(LABEL_STATUS);
+		}
+		throw new UserNotFoundException(USER_STATUS);
+	}
+
+	@Transactional
+	@Override
+	public List<LabelInfo> getLabels(String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			List<LabelInfo> fetchedLabels = labelRepository.getAllLabels(user.getUserId());
+			if(!fetchedLabels.isEmpty()) {
+				return fetchedLabels;
+			}
+			return fetchedLabels;
+		}
+		throw new UserNotFoundException(USER_STATUS);
 	}
 } 
