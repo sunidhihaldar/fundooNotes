@@ -45,4 +45,12 @@ public class LabelController {
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label removed", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....label not removed", 404));
 	}
+
+	@PostMapping("addLabel")
+	public ResponseEntity<Response> addLabel(@RequestParam("labelId") long labelId, @RequestParam("noteId") long noteId,
+			@RequestHeader("token") String token) {
+		boolean result = labelService.addLabel(labelId, noteId, token);
+		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label added", 200))
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....label not added", 404));
+	}
 }

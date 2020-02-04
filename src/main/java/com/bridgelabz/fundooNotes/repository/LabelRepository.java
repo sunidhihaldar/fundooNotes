@@ -35,7 +35,7 @@ public class LabelRepository implements ILabelRepository {
 	}
 
 	@Override
-	public LabelInfo getLabelById(long labelId) {
+	public LabelInfo findById(long labelId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("FROM LabelInfo where label_id=:labelId");
 		query.setParameter("labelId", labelId);

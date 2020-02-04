@@ -83,7 +83,7 @@ public class LabelServiceImpl implements ILabelService {
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
 			if(note != null) {
-				LabelInfo label = labelRepository.getLabelById(labelId);
+				LabelInfo label = labelRepository.findById(labelId);
 				if (label != null) {
 					note.getLabelList().remove(label);
 					noteRepository.save(note);
@@ -95,4 +95,25 @@ public class LabelServiceImpl implements ILabelService {
 		}
 		throw new UserNotFoundException("User not found");
 	}
-}
+
+	@Transactional
+	@Override
+	public boolean addLabel(long labelId, long noteId, String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			NoteInfo note = noteRepository.findById(noteId);
+			if(note != null) {
+				LabelInfo label = labelRepository.findById(labelId);
+				if(label != null) {
+					note.getLabelList().add(label);
+					labelRepository.save(label);
+					return true;
+				}
+				throw new LabelException("Label doesn't exist");
+			}
+			throw new NoteException("Note not found");
+		}
+		throw new UserNotFoundException("User not found");
+	}
+} 
