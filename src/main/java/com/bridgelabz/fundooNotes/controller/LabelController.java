@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundooNotes.dto.LabelDto;
 import com.bridgelabz.fundooNotes.model.LabelInfo;
+import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.ILabelService;
 
@@ -74,12 +75,22 @@ public class LabelController {
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label deleted permanently", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....label not deleted", 404));
 	}
-	
+
 	@GetMapping("getAllLabels")
-	public ResponseEntity<Response>  getAllLabels(@RequestHeader("token") String token) {
+	public ResponseEntity<Response> getAllLabels(@RequestHeader("token") String token) {
 		List<LabelInfo> list = labelService.getLabels(token);
-		if(!list.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("All labels are", 200, list));
+		if (!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All labels are ", 200, list));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
+	}
+
+	@GetMapping("getAllNotes")
+	public ResponseEntity<Response> getAllNotes(@RequestParam("token") long labelId,
+			@RequestHeader("token") String token) {
+		List<NoteInfo> list = labelService.getNotes(labelId, token);
+		if (!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("All notes for this label are ", 200));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty list", 404));
 	}

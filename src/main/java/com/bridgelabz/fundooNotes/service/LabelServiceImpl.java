@@ -171,4 +171,18 @@ public class LabelServiceImpl implements ILabelService {
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
+
+	@Override
+	public List<NoteInfo> getNotes(long labelId, String token) {
+		long userId = generate.parseJWT(token);
+		UserEntity user = userRepository.getUser(userId);
+		if(user != null) {
+			LabelInfo label = labelRepository.findById(labelId);
+			if(label != null) {
+				return label.getNoteList();
+			}
+			throw new LabelException(LABEL_STATUS);
+		}
+		throw new UserNotFoundException(USER_STATUS);
+	}
 } 

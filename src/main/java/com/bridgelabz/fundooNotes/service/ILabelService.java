@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bridgelabz.fundooNotes.dto.LabelDto;
 import com.bridgelabz.fundooNotes.model.LabelInfo;
+import com.bridgelabz.fundooNotes.model.NoteInfo;
 
 public interface ILabelService {
 
@@ -20,4 +21,6 @@ public interface ILabelService {
 	public boolean deletePermanentlyLabel(long labelId, String token);
 	
 	public List<LabelInfo> getLabels(String token);
+	
+	public List<NoteInfo> getNotes(long labelId, String token);
 }
