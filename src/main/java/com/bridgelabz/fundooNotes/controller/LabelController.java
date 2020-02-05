@@ -32,7 +32,7 @@ public class LabelController {
 
 	@Autowired
 	private ILabelService labelService;
-
+	
 	@PostMapping("create")
 	@ApiOperation(value = "Api to create label", response = Response.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Label created "),
