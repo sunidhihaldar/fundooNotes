@@ -131,9 +131,13 @@ public class LabelServiceImpl implements ILabelService {
 		if (user != null) {
 			LabelInfo label = labelRepository.findById(labelId);
 			if (label != null) {
+				LabelInfo labelName = labelRepository.getLabel(labelDto.getLabelName());
+				if(labelName == null) {
 				label.setLabelName(labelDto.getLabelName());
 				labelRepository.save(label);
 				return true;
+				}
+				throw new NoteException("Note exists");
 			}
 			throw new LabelException(LABEL_STATUS);
 		}

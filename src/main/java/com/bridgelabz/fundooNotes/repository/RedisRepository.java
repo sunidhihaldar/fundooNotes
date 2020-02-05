@@ -1,25 +1,32 @@
 package com.bridgelabz.fundooNotes.repository;
 
-import org.springframework.data.redis.core.HashOperations;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.bridgelabz.fundooNotes.model.NoteInfo;
+import com.bridgelabz.fundooNotes.util.JwtGenerator;
 
 @Repository
 public class RedisRepository {
 
-	@SuppressWarnings("unused")
 	private RedisTemplate<String , Object> redisTemplate;
 	
-	private HashOperations<String, Long, Object> hashOperations;
+	@Autowired
+	private JwtGenerator generate;
 	
 	public RedisRepository(RedisTemplate<String, Object> redisTemplate) {
 		this.redisTemplate = redisTemplate;
-		hashOperations = redisTemplate.opsForHash();
 	}
 	
-	public void save(NoteInfo  note) {
-		hashOperations.put("note", note.getNoteId(), note);
+	public long getRedisCacheId(String token) {
+		String[] splittedToken = token.split("\\.");
+		String redisTokenKey = splittedToken[1] + splittedToken[2];
+		if(redisTemplate.opsForValue().get(redisTokenKey) == null) {
+			long idForRedis = generate.parseJWT(token);
+			redisTemplate.opsForValue().set(redisTokenKey, idForRedis, 3 * 60, TimeUnit.SECONDS);
+		}
+		return (Long) redisTemplate.opsForValue().get(redisTokenKey);
 	}
 }

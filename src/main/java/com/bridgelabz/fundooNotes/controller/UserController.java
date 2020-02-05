@@ -48,6 +48,9 @@ public class UserController {
 	}
 
 	@GetMapping("verification/{token}")
+	@ApiOperation(value = "Api to verify user", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "verification done"),
+			@ApiResponse(code = 400, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
 		if (service.isVerified(token))
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("verified", 200));
@@ -55,6 +58,9 @@ public class UserController {
 	}
 
 	@PostMapping("login")
+	@ApiOperation(value = "Api for user login", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "login successful"),
+			@ApiResponse(code = 400, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<UserAuthenticationResponse> login(@RequestBody LoginDetails loginInfo) {
 		UserEntity fetchedUser = service.login(loginInfo);
 		if (fetchedUser != null) {
@@ -72,14 +78,20 @@ public class UserController {
 	}
 
 	@PutMapping("updatePassword/{token}")
+	@ApiOperation(value = "Api to update password", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "password updated"),
+			@ApiResponse(code = 304, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
 			@RequestBody UpdatePassword pwd) {
 		boolean result = service.updatePassword(token, pwd);
 		return (result) ? ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("Password updated", 200))
-				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Password not updated", 400));
+				: ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(new Response("Password not updated", 304));
 	}
 
 	@PostMapping("forgotPassword")
+	@ApiOperation(value = "Api to send forgot password link", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "link sent"),
+			@ApiResponse(code = 400, message = "The resource you were trying to fetch is not found") })
 	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) {
 		boolean result = service.isUserAvailable(email);
 		return (result) ? ResponseEntity.status(HttpStatus.FOUND).body(new Response("User found", 200))

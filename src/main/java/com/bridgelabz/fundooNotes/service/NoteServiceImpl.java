@@ -1,12 +1,15 @@
 package com.bridgelabz.fundooNotes.service;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundooNotes.customException.NoteException;
@@ -19,6 +22,7 @@ import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.repository.IUserRepository;
 import com.bridgelabz.fundooNotes.repository.NoteRepository;
+import com.bridgelabz.fundooNotes.repository.RedisRepository;
 import com.bridgelabz.fundooNotes.util.JwtGenerator;
 
 /**
@@ -40,13 +44,18 @@ public class NoteServiceImpl implements INoteService {
 
 	@Autowired
 	private JwtGenerator generate;
+	
+	@Autowired
+	private RedisRepository redisRepository;
 
 	static final String USER_STATUS = "User not found";
 	static final String NOTE_STATUS = "Note not found";
 	
 	@Override
 	public boolean createNote(NoteDto note, String token) {
-		long userId = generate.parseJWT(token);
+		//long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
+		System.out.println(userId);
 		UserEntity user = userRepository.getUser(userId);
 		NoteInfo noteInfo = new NoteInfo();
 		if (user != null && user.isVerified()) {
