@@ -1,23 +1,22 @@
 package com.bridgelabz.fundooNotes.service;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.fundooNotes.customException.NoteException;
+import com.bridgelabz.fundooNotes.customException.LabelNotFoundException;
+import com.bridgelabz.fundooNotes.customException.NoteNotFoundException;
 import com.bridgelabz.fundooNotes.customException.UserNotFoundException;
 import com.bridgelabz.fundooNotes.customException.UserNotVerifiedException;
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
 import com.bridgelabz.fundooNotes.dto.ReminderDto;
+import com.bridgelabz.fundooNotes.model.LabelInfo;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.model.UserEntity;
 import com.bridgelabz.fundooNotes.repository.IUserRepository;
@@ -55,7 +54,6 @@ public class NoteServiceImpl implements INoteService {
 	public boolean createNote(NoteDto note, String token) {
 		//long userId = generate.parseJWT(token);
 		long userId = redisRepository.getRedisCacheId(token);
-		System.out.println(userId);
 		UserEntity user = userRepository.getUser(userId);
 		NoteInfo noteInfo = new NoteInfo();
 		if (user != null && user.isVerified()) {
@@ -75,7 +73,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean updateNote(NoteUpdation updateNote, String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		NoteInfo note = noteRepository.findById(updateNote.getNoteId());
 		if (user != null) {
@@ -91,7 +89,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotVerifiedException("Please verify");
 	}
@@ -106,7 +104,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.deleteNote(noteId);
 				return true;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -114,7 +112,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean archiveNote(long noteId, String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -125,9 +123,9 @@ public class NoteServiceImpl implements INoteService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new NoteException("note already archived");
+				throw new NoteNotFoundException("note already archived");
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -135,7 +133,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean isPinnedNote(long noteId, String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -151,7 +149,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return false;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -159,7 +157,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean trashNote(long noteId, String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -172,14 +170,14 @@ public class NoteServiceImpl implements INoteService {
 				}
 				return false;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
 	public List<NoteInfo> getAllNotes(String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllNotes(user.getUserId());
@@ -193,7 +191,7 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllPinnedNotes(String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllPinnedNotes(user.getUserId());
@@ -207,7 +205,7 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllTrashedNotes(String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllTrashedNotes(user.getUserId());
@@ -221,7 +219,7 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllArchivedNotes(String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllArchivedNotes(user.getUserId());
@@ -236,7 +234,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean updateColour(long noteId, String token, String colour) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -246,7 +244,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -254,7 +252,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean setReminderNote(long noteId, String token, ReminderDto reminderDto) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -264,7 +262,7 @@ public class NoteServiceImpl implements INoteService {
 				noteRepository.save(note);
 				return true;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -272,7 +270,7 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean removeReminderNote(long noteId, String token) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -283,23 +281,41 @@ public class NoteServiceImpl implements INoteService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new NoteException("Not already set null");
+				throw new NoteNotFoundException("Not already set null");
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Override
 	public List<NoteInfo> searchByTitle(String token, String title) {
-		long userId = generate.parseJWT(token);
+		long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllNotes(title);
 			if (!fetchedNotes.isEmpty()) {
 				return fetchedNotes;
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
+		}
+		throw new UserNotFoundException(USER_STATUS);
+	}
+	
+	@Transactional
+	@Override
+	public List<LabelInfo> getLabelsOfNote(long noteId, String token) {
+		long userId = redisRepository.getRedisCacheId(token);
+		UserEntity user = userRepository.getUser(userId);
+		if (user != null) {
+			NoteInfo note = noteRepository.findById(noteId);
+			if (note != null) {
+				if (!note.getLabelList().isEmpty()) {
+					return note.getLabelList();
+				}
+				throw new LabelNotFoundException("No labels mapped");
+			}
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}

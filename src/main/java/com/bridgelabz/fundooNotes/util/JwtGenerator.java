@@ -17,7 +17,6 @@ public class JwtGenerator {
 		try {
 			generatedToken = JWT.create().withClaim("id", id).sign(Algorithm.HMAC256(SECRET));
 		} catch (IllegalArgumentException | JWTCreationException e) {
-
 			e.printStackTrace();
 		}
 		return generatedToken;
@@ -30,7 +29,6 @@ public class JwtGenerator {
 				userId = JWT.require(Algorithm.HMAC256(SECRET)).build().verify(jwtToken).getClaim("id").asLong();
 			}
 		} catch (IllegalArgumentException | JWTCreationException e) {
-
 			e.printStackTrace();
 		}
 		return userId;

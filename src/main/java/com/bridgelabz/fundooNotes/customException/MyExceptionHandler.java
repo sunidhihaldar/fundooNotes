@@ -23,14 +23,14 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(ex.getMessage(), 400));
 	}
 
-	@ExceptionHandler(NoteException.class)
-	public ResponseEntity<Response> noteException(NoteException ex) {
+	@ExceptionHandler(NoteNotFoundException.class)
+	public ResponseEntity<Response> noteException(NoteNotFoundException ex) {
 		Response response = new Response(ex.getMessage(), 400);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(LabelException.class)
-	public ResponseEntity<Response> labelException(LabelException ex) {
+	@ExceptionHandler(LabelNotFoundException.class)
+	public ResponseEntity<Response> labelException(LabelNotFoundException ex) {
 		Response response = new Response(ex.getMessage(), 502);
 		return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
 	}

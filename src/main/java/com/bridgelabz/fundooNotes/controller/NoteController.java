@@ -19,9 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundooNotes.dto.NoteDto;
 import com.bridgelabz.fundooNotes.dto.NoteUpdation;
 import com.bridgelabz.fundooNotes.dto.ReminderDto;
+import com.bridgelabz.fundooNotes.model.LabelInfo;
 import com.bridgelabz.fundooNotes.model.NoteInfo;
 import com.bridgelabz.fundooNotes.response.Response;
 import com.bridgelabz.fundooNotes.service.INoteService;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("note")
@@ -138,5 +143,17 @@ public class NoteController {
 	public ResponseEntity<Response> searchByTitle(@RequestHeader("token") String token, @RequestParam String title) {
 		List<NoteInfo> list = noteService.searchByTitle(token, title);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("Notes are", 200, list));
+	}
+	
+	@GetMapping("labels/notes/{noteId}")
+	@ApiOperation(value = "Api to get all labels of a note", response = Response.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "All labels of a note are "),
+			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
+	public ResponseEntity<Response> getLabelsOfANote(@PathVariable("noteId") long noteId, String token) {
+		List<LabelInfo> list = noteService.getLabelsOfNote(noteId, token);
+		if (!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Labels are ", 200, list));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("No labels mapped", 404));
 	}
 }

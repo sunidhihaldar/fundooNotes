@@ -8,8 +8,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.fundooNotes.customException.LabelException;
-import com.bridgelabz.fundooNotes.customException.NoteException;
+import com.bridgelabz.fundooNotes.customException.LabelAlreadyExistsException;
+import com.bridgelabz.fundooNotes.customException.LabelNotFoundException;
+import com.bridgelabz.fundooNotes.customException.NoteNotFoundException;
 import com.bridgelabz.fundooNotes.customException.UserNotFoundException;
 import com.bridgelabz.fundooNotes.dto.LabelDto;
 import com.bridgelabz.fundooNotes.model.LabelInfo;
@@ -53,7 +54,7 @@ public class LabelServiceImpl implements ILabelService {
 				labelRepository.save(labelInfo);
 				return true;
 			}
-			throw new LabelException("Label already exists");
+			throw new LabelAlreadyExistsException("Label already exists");
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -74,9 +75,9 @@ public class LabelServiceImpl implements ILabelService {
 					labelRepository.save(newLabel);
 					return true;
 				}
-				throw new LabelException("Label already exists");
+				throw new LabelAlreadyExistsException("Label already exists");
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -95,16 +96,16 @@ public class LabelServiceImpl implements ILabelService {
 					noteRepository.save(note);
 					return true;
 				}
-				throw new LabelException(LABEL_STATUS);
+				throw new LabelNotFoundException(LABEL_STATUS);
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
 
 	@Transactional
 	@Override
-	public boolean addLabel(long labelId, long noteId, String token) {
+	public boolean addLabelToNote(long labelId, long noteId, String token) {
 		long userId = generate.parseJWT(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
@@ -116,9 +117,9 @@ public class LabelServiceImpl implements ILabelService {
 					labelRepository.save(label);
 					return true;
 				}
-				throw new LabelException(LABEL_STATUS);
+				throw new LabelNotFoundException(LABEL_STATUS);
 			}
-			throw new NoteException(NOTE_STATUS);
+			throw new NoteNotFoundException(NOTE_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -132,14 +133,14 @@ public class LabelServiceImpl implements ILabelService {
 			LabelInfo label = labelRepository.findById(labelId);
 			if (label != null) {
 				LabelInfo labelName = labelRepository.getLabel(labelDto.getLabelName());
-				if(labelName == null) {
-				label.setLabelName(labelDto.getLabelName());
-				labelRepository.save(label);
-				return true;
+				if (labelName == null) {
+					label.setLabelName(labelDto.getLabelName());
+					labelRepository.save(label);
+					return true;
 				}
-				throw new NoteException("Note exists");
+				throw new LabelAlreadyExistsException("Label exists");
 			}
-			throw new LabelException(LABEL_STATUS);
+			throw new LabelNotFoundException(LABEL_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -156,7 +157,7 @@ public class LabelServiceImpl implements ILabelService {
 				labelRepository.save(label);
 				return true;
 			}
-			throw new LabelException(LABEL_STATUS);
+			throw new LabelNotFoundException(LABEL_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}
@@ -185,7 +186,7 @@ public class LabelServiceImpl implements ILabelService {
 			if (label != null) {
 				return label.getNoteList();
 			}
-			throw new LabelException(LABEL_STATUS);
+			throw new LabelNotFoundException(LABEL_STATUS);
 		}
 		throw new UserNotFoundException(USER_STATUS);
 	}

@@ -21,7 +21,7 @@ public interface ILabelService {
 	
 	public boolean removeLabel(long labelId, long noteId, String token);
 	
-	public boolean addLabel(long labelId, long noteId, String token);
+	public boolean addLabelToNote(long labelId, long noteId, String token);
 	
 	public boolean editLabel(long labelId, String token, LabelDto labelDto);
 	

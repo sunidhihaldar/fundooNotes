@@ -1,10 +1,10 @@
 package com.bridgelabz.fundooNotes.customException;
 
-public class EmailAlreadyExistsException extends RuntimeException {
+public class LabelNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public EmailAlreadyExistsException(String message) {
+	public LabelNotFoundException(String message) {
 		super(message);
 	}
 }

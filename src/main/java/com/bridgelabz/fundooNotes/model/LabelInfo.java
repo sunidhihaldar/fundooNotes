@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * This class acts as a label entity and the parameters gets stored in the database
  * @author Sunidhi Haldar
@@ -28,6 +30,8 @@ public class LabelInfo {
 
 	private String labelName;
 
+	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "labelList")
 	private List<NoteInfo> noteList;
 

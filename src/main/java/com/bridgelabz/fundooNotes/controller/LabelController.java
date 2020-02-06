@@ -27,12 +27,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("label")
+@RequestMapping("labels")
 public class LabelController {
 
 	@Autowired
 	private ILabelService labelService;
-	
+
 	@PostMapping("create")
 	@ApiOperation(value = "Api to create label", response = Response.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Label created "),
@@ -69,9 +69,9 @@ public class LabelController {
 	@ApiOperation(value = "Api to add label", response = Response.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Label added "),
 			@ApiResponse(code = 404, message = "The resource you were trying to fetch is not found") })
-	public ResponseEntity<Response> addLabel(@RequestParam("labelId") long labelId, @RequestParam("noteId") long noteId,
-			@RequestHeader("token") String token) {
-		boolean result = labelService.addLabel(labelId, noteId, token);
+	public ResponseEntity<Response> addLabelToNote(@RequestParam("labelId") long labelId,
+			@RequestParam("noteId") long noteId, @RequestHeader("token") String token) {
+		boolean result = labelService.addLabelToNote(labelId, noteId, token);
 		return (result) ? ResponseEntity.status(HttpStatus.OK).body(new Response("Label added", 200))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error....label not added", 404));
 	}

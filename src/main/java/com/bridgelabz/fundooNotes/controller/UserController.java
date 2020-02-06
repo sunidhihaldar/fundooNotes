@@ -67,6 +67,7 @@ public class UserController {
 			if (fetchedUser.isVerified()) {
 				// after verification
 				String generatedToken = generate.createJwtToken(fetchedUser.getUserId());
+				System.out.println("Token : " + generatedToken);
 				return ResponseEntity.status(HttpStatus.ACCEPTED).header(generatedToken, loginInfo.getEmail())
 						.body(new UserAuthenticationResponse("login successful", 200, loginInfo));
 			}

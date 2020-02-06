@@ -1,10 +1,10 @@
 package com.bridgelabz.fundooNotes.customException;
 
-public class LabelException extends RuntimeException {
+public class NoteNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public LabelException(String message) {
+	public NoteNotFoundException(String message) {
 		super(message);
 	}
 }
