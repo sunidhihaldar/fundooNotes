@@ -88,4 +88,11 @@ public class NoteRepository {
 		return entityManager.unwrap(Session.class).createQuery("FROM NoteInfo where title=:title and is_trashed=false")
 				.setParameter("title", title).getResultList();
 	}
+	
+	public List<NoteInfo> getAllReminderNotes(long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query selectQuery = session.createQuery("From NoteInfo where user_id=:userId and is_trashed=true");
+		selectQuery.setParameter("userId", userId);
+		return selectQuery.getResultList();
+	}
 }

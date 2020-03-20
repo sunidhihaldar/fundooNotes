@@ -53,7 +53,7 @@ public class UserServiceImpl implements IUserService {
 		String password = bCryptPasswordEncoder.encode(user.getPassword());
 		user.setPassword(password);
 		userRepository.save(user);
-		String response = MailResponse.formMessage("http://localhost:8081/user/verification",
+		String response = MailResponse.formMessage("http://localhost:8083/user/verification",
 				generate.createJwtToken(user.getUserId()));
 		mailServiceProvider.sendEmail(user.getEmail(), "Registration verification", response);
 		return true;
@@ -78,7 +78,7 @@ public class UserServiceImpl implements IUserService {
 				if (user.isVerified())
 					return user;
 				// else sends a link
-				String response = MailResponse.formMessage("http://localhost:8081/user/verification",
+				String response = MailResponse.formMessage("http://localhost:8083/user/verification",
 						generate.createJwtToken(user.getUserId()));
 				mailServiceProvider.sendEmail(user.getEmail(), "Registration verification", response);
 				return null;
@@ -103,13 +103,13 @@ public class UserServiceImpl implements IUserService {
 		UserEntity isUserAvailable = userRepository.getUser(email);
 		if (isUserAvailable != null) {
 			if (isUserAvailable.isVerified()) {
-				String response = MailResponse.formMessage("http://localhost:8081/user/updatePassword",
+				String response = MailResponse.formMessage("http://localhost:8083/user/updatePassword",
 						generate.createJwtToken(isUserAvailable.getUserId()));
 				mailServiceProvider.sendEmail(isUserAvailable.getEmail(), "Update password link", response);
 				return true;
 			}
 			// if user is not verified
-			String response = MailResponse.formMessage("http://localhost:8081/user/verification",
+			String response = MailResponse.formMessage("http://localhost:8083/user/verification",
 					generate.createJwtToken(isUserAvailable.getUserId()));
 			mailServiceProvider.sendEmail(isUserAvailable.getEmail(), "Registration  verification", response);
 			return false;

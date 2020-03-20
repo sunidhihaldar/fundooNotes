@@ -52,8 +52,8 @@ public class NoteServiceImpl implements INoteService {
 	
 	@Override
 	public boolean createNote(NoteDto note, String token) {
-		//long userId = generate.parseJWT(token);
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		NoteInfo noteInfo = new NoteInfo();
 		if (user != null && user.isVerified()) {
@@ -73,7 +73,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean updateNote(NoteUpdation updateNote, String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		NoteInfo note = noteRepository.findById(updateNote.getNoteId());
 		if (user != null) {
@@ -112,7 +113,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean archiveNote(long noteId, String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -133,7 +135,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean isPinnedNote(long noteId, String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -157,7 +160,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean trashNote(long noteId, String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -177,7 +181,8 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllNotes(String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllNotes(user.getUserId());
@@ -191,7 +196,8 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllPinnedNotes(String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllPinnedNotes(user.getUserId());
@@ -205,7 +211,8 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllTrashedNotes(String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllTrashedNotes(user.getUserId());
@@ -219,7 +226,8 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> getAllArchivedNotes(String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllArchivedNotes(user.getUserId());
@@ -234,7 +242,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean updateColour(long noteId, String token, String colour) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -252,7 +261,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean setReminderNote(long noteId, String token, ReminderDto reminderDto) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -270,7 +280,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public boolean removeReminderNote(long noteId, String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
@@ -290,7 +301,8 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public List<NoteInfo> searchByTitle(String token, String title) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			List<NoteInfo> fetchedNotes = noteRepository.getAllNotes(title);
@@ -305,7 +317,8 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	@Override
 	public List<LabelInfo> getLabelsOfNote(long noteId, String token) {
-		long userId = redisRepository.getRedisCacheId(token);
+		long userId = generate.parseJWT(token);
+		//long userId = redisRepository.getRedisCacheId(token);
 		UserEntity user = userRepository.getUser(userId);
 		if (user != null) {
 			NoteInfo note = noteRepository.findById(noteId);
